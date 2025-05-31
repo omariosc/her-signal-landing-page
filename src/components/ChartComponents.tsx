@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import React from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
   ArcElement,
+  TooltipItem,
 } from 'chart.js';
 import { Bar, Doughnut } from 'react-chartjs-2';
 
@@ -79,8 +80,12 @@ export function RegionalDataChart({ region, data }: RegionalDataChartProps) {
         },
       },
       tooltip: {
+        padding: 12,
+        boxPadding: 6,
+        usePointStyle: true,
+        pointStyle: 'rect',
         callbacks: {
-          label: function (context: any) {
+          label: function (context: TooltipItem<'bar'>) {
             return `${context.dataset.label}: ${context.raw}%`;
           },
         },
@@ -132,8 +137,12 @@ export function GlobalPrevalenceChart() {
         },
       },
       tooltip: {
+        padding: 12,
+        boxPadding: 6,
+        usePointStyle: true,
+        pointStyle: 'rect',
         callbacks: {
-          label: function (context: any) {
+          label: function (context: TooltipItem<'doughnut'>) {
             return `${context.label}: ${context.raw}%`;
           },
         },

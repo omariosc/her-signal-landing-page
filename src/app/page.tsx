@@ -1,364 +1,586 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import Navigation from '@/components/Navigation';
-import { RegionalDataChart, GlobalPrevalenceChart } from '@/components/ChartComponents';
-import Modal from '@/components/Modal';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import {
+  Shield,
+  Brain,
+  Eye,
+  Users,
+  BarChart3,
+  Smartphone,
+  Watch,
+  Map,
+  Lightbulb,
+  ArrowRight,
+  CheckCircle,
+  AlertTriangle,
+  Zap,
+  Target,
+  Heart,
+  Code,
+} from "lucide-react";
+
+import Navigation from "@/components/Navigation";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  RegionalDataChart,
+  GlobalPrevalenceChart,
+} from "@/components/ChartComponents";
 
 const regionalData = {
-  'UK': {
-    labels: ['Harassment in Public (16-34 y/o)', 'Felt Followed (16-34 y/o)', 'Sexual Assault Since Age 16', 'Stalking (Last Year)'],
+  UK: {
+    labels: [
+      "Harassment in Public (16-34 y/o)",
+      "Felt Followed (16-34 y/o)",
+      "Sexual Assault Since Age 16",
+      "Stalking (Last Year)",
+    ],
     data: [67, 29, 25, 3.1],
-    source: 'ONS, YouGov'
+    source: "ONS, YouGov",
   },
-  'USA': {
-    labels: ['Harassment in Public Spaces', 'First Harassment before Age 18', 'First Harassment before Age 13', 'Violent Victimization by Stranger (per 1k)'],
+  USA: {
+    labels: [
+      "Harassment in Public Spaces",
+      "First Harassment before Age 18",
+      "First Harassment before Age 13",
+      "Violent Victimization by Stranger (per 1k)",
+    ],
     data: [73, 56, 20, 11.4],
-    source: 'Stop Street Harassment, NCVS'
+    source: "Stop Street Harassment, NCVS",
   },
-  'Europe': {
-    labels: ['Physical/Sexual Violence by Non-Partner', 'Sexual Violence by Non-Partner', 'Stalking by Non-Partner', 'Cyber Harassment Since Age 15'],
+  Europe: {
+    labels: [
+      "Physical/Sexual Violence by Non-Partner",
+      "Sexual Violence by Non-Partner",
+      "Stalking by Non-Partner",
+      "Cyber Harassment Since Age 15",
+    ],
     data: [20, 13, 14, 10],
-    source: 'EU-GBV Survey'
+    source: "EU-GBV Survey",
   },
-  'Global South': {
-    labels: ['Feel Unsafe in Public (Delhi)', 'Harassment on Public Transport (Brazil)', 'Experienced VAWG on Public Transport (PNG)', 'Experienced Sexual Harassment (Egypt)'],
+  "Global South": {
+    labels: [
+      "Feel Unsafe in Public (Delhi)",
+      "Harassment on Public Transport (Brazil)",
+      "Experienced VAWG on Public Transport (PNG)",
+      "Experienced Sexual Harassment (Egypt)",
+    ],
     data: [95, 97, 90, 99.3],
-    source: 'UN Women, ActionAid'
-  }
+    source: "UN Women, ActionAid",
+  },
 };
 
-const theoryModals = {
-  victim: {
-    title: 'The User\'s Shield: A Non-Confrontational Strategy',
-    content: `
-      <p class="mb-4 text-gray-600">Women widely adopt phone calls as a safety tactic because it's a low-stakes, non-confrontational way to alter a threatening situation. Instead of directly challenging a potential harasser, which risks escalation, a phone call introduces a perceived third party.</p>
-      <ul class="list-disc list-inside space-y-2 text-gray-700">
-        <li><strong>Creates a "Social Shield":</strong> The act of being in a conversation makes the user appear occupied and socially connected, deterring unwanted approaches.</li>
-        <li><strong>Invited Space:</strong> It creates a sense of "invited space" or remote companionship, which can alleviate feelings of isolation and vulnerability.</li>
-        <li><strong>Plausible Deniability:</strong> It allows the user to disengage or move away under the guise of the phone call, without directly reacting to the threat.</li>
-        <li><strong>Reduces "Safety Work" Burden:</strong> An easy-to-use app would formalize this intuitive tactic, reducing the cognitive load of having to feign a convincing conversation under duress.</li>
-      </ul>`
+const theoryCards = [
+  {
+    icon: Users,
+    title: "The User's Shield",
+    subtitle: "Non-Confrontational Strategy",
+    description:
+      "Phone calls create a 'social shield' and sense of remote companionship, reducing vulnerability without direct confrontation.",
+    details: [
+      "Creates perceived social connection",
+      "Provides plausible deniability",
+      "Reduces cognitive 'safety work' burden",
+      "Offers non-aggressive deterrent option",
+    ],
   },
-  perpetrator: {
-    title: 'The Perpetrator\'s Calculus: Increasing Perceived Risk',
-    content: `
-      <p class="mb-4 text-gray-600">From a perpetrator's perspective, a woman on a phone call changes their risk-reward analysis, making them a less appealing target. This aligns with several criminological theories:</p>
-      <ul class="list-disc list-inside space-y-2 text-gray-700">
-        <li><strong>Rational Choice Theory (RCT):</strong> The call increases the perceived "cost" or risk of the crime (e.g., being identified, reported, or interrupted), making the potential "reward" less attractive.</li>
-        <li><strong>Situational Crime Prevention (SCP):</strong> The strategy increases the effort and risk for the offender by introducing a form of surveillance and guardianship.</li>
-         <li><strong>Situational Action Theory (SAT):</strong> The call alters the immediate setting by introducing a deterrent threat (the remote listener), which can trigger deliberation in the offender and lead them to see crime as a less viable option.</li>
-        <li><strong>Disrupts Target Selection:</strong> Perpetrators often seek isolated or vulnerable individuals. A phone call signals connection and awareness, disrupting this selection script.</li>
-      </ul>`
+  {
+    icon: Brain,
+    title: "Perpetrator's Calculus",
+    subtitle: "Rational Choice Theory",
+    description:
+      "Increases perceived risk and effort for potential offenders, disrupting their target selection process.",
+    details: [
+      "Increases cost-benefit analysis hesitation",
+      "Signals potential surveillance/witnesses",
+      "Disrupts victim isolation assessment",
+      "Creates uncertainty about consequences",
+    ],
   },
-  bystander: {
-    title: 'The Remote Guardian: Simulating a Bystander',
-    content: `
-      <p class="mb-4 text-gray-600">A phone call effectively simulates the presence of a "capable guardian" or an active bystander, even if they are remote. This can be a powerful psychological deterrent.</p>
-      <ul class="list-disc list-inside space-y-2 text-gray-700">
-        <li><strong>Capable Guardianship (Routine Activities Theory):</strong> The person on the other end of the call is perceived as a guardian who could be alerted, call for help, or witness the event, increasing the risk of apprehension.</li>
-        <li><strong>Simulated Bystander Intervention:</strong> The conversation can mimic bystander intervention tactics. For example, the AI asking "Are you okay? Describe the person" is a form of remote documentation and direct support.</li>
-        <li><strong>Reduces Anonymity:</strong> The core fear for many perpetrators is being caught. A phone call suggests their actions are not anonymous and could have immediate consequences.</li>
-        <li><strong>Psychological Impact:</strong> The simple belief that "someone is listening" can be enough to make a perpetrator reconsider their actions, breaking the sense of power and control they feel over an isolated victim.</li>
-      </ul>`
-  }
-};
+  {
+    icon: Eye,
+    title: "Remote Guardian",
+    subtitle: "Capable Guardianship",
+    description:
+      "Simulates presence of an active bystander who could intervene, document, or alert authorities.",
+    details: [
+      "Creates illusion of remote supervision",
+      "Implies potential real-time documentation",
+      "Suggests immediate intervention capacity",
+      "Reduces perpetrator sense of anonymity",
+    ],
+  },
+];
 
 const techSolutions = [
   {
-    category: "Personal Safety Apps",
-    icon: "📱",
-    description: "Smartphone apps with features like SOS alerts, location sharing, and evidence recording.",
-    examples: "Life360, bSafe, Hollie Guard, WalkSafe",
-    pros: "Accessible, multi-functional, some have direct police integration and court-admissible evidence capture (Hollie Guard). Can provide peace of mind.",
-    cons: "Reliant on phone battery/signal. Risk of misuse by abusers for stalking. Can place safety burden on victims. Effectiveness in preventing attacks is not robustly proven."
+    icon: Smartphone,
+    title: "Personal Safety Apps",
+    examples: "Life360, bSafe, Hollie Guard",
+    pros: "Multi-functional, some police integration, evidence capture",
+    cons: "Battery dependent, potential stalking tool, effectiveness unproven",
   },
   {
-    category: "Wearable Devices",
-    icon: "⌚️",
-    description: "Discreet panic buttons in jewelry or smartwatches, and conceptual anti-assault clothing.",
-    examples: "Smartwatch SOS, invisaWear, SHEbras (concept)",
-    pros: "More discreet and accessible than a phone. Some can automatically detect falls or potential attacks (Epowar concept).",
-    cons: "Often require manual activation. Anti-assault clothing heavily criticized for victim-blaming. Practicality and effectiveness in real-world scenarios are questionable."
+    icon: Watch,
+    title: "Wearable Devices",
+    examples: "Smartwatch SOS, invisaWear",
+    pros: "Discreet, always accessible, automatic detection possible",
+    cons: "Manual activation needed, victim-blaming concerns",
   },
   {
-    category: "Crowdsourcing Platforms",
-    icon: "🗺️",
-    description: "Apps and websites using community input to map safety risks and incidents.",
+    icon: Map,
+    title: "Crowdsourcing Platforms",
     examples: "SafetiPin, Ushahidi, HarassMap",
-    pros: "Empowers communities to identify risks. Data can inform urban planning and policy. Increases transparency.",
-    cons: "Data can be subjective or biased. May inadvertently increase fear or stigmatize areas. Impact depends on authorities acting on the data."
+    pros: "Community empowerment, data for planning, transparency",
+    cons: "Subjective data, may increase fear, depends on authority action",
   },
   {
-    category: "Environmental Tech",
-    icon: "💡",
-    description: "Smart city technologies like responsive lighting and AI-powered surveillance systems.",
-    examples: "Smart Street Lighting, AI-CCTV",
-    pros: "Improved lighting is linked to reduced crime and perceived safety. AI can potentially detect threats in real-time.",
-    cons: "Major ethical concerns: privacy, mass surveillance, and significant risk of algorithmic bias (racial/gender). High cost and potential for misuse."
-  }
+    icon: Lightbulb,
+    title: "Environmental Tech",
+    examples: "Smart lighting, AI-CCTV",
+    pros: "Proven crime reduction, real-time threat detection",
+    cons: "Privacy concerns, algorithmic bias, high costs",
+  },
+];
+
+const innovationPrinciples = [
+  {
+    number: "01",
+    title: "Survivor-Centric Design",
+    description:
+      "Co-design with diverse women, prioritizing their needs and agency over technical sophistication.",
+    icon: Heart,
+  },
+  {
+    number: "02",
+    title: "Prevention Focus",
+    description:
+      "Move beyond reactive alerts to proactive violence prevention and community empowerment.",
+    icon: Shield,
+  },
+  {
+    number: "03",
+    title: "Address Root Causes",
+    description:
+      "Challenge harmful norms and perpetrator behavior, not just protect potential victims.",
+    icon: Target,
+  },
+  {
+    number: "04",
+    title: "Ethics-First Development",
+    description:
+      "Embed privacy, security, and bias mitigation from day one of development.",
+    icon: CheckCircle,
+  },
+  {
+    number: "05",
+    title: "Ecosystem Integration",
+    description:
+      "Connect with existing services and infrastructure rather than creating isolated solutions.",
+    icon: Zap,
+  },
+  {
+    number: "06",
+    title: "Reduce Safety Burden",
+    description:
+      "Alleviate rather than increase the cognitive and emotional labor women perform to stay safe.",
+    icon: Brain,
+  },
 ];
 
 export default function Home() {
-  const [selectedRegion, setSelectedRegion] = useState('UK');
-  const [activeTab, setActiveTab] = useState('features');
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState({ title: '', content: '' });
-  const [techModalOpen, setTechModalOpen] = useState(false);
-  const [selectedTech, setSelectedTech] = useState(techSolutions[0]);
-
-  const handleTheoryCardClick = (modalType: keyof typeof theoryModals) => {
-    setModalContent(theoryModals[modalType]);
-    setModalOpen(true);
-  };
-
-  const handleTechCardClick = (tech: typeof techSolutions[0]) => {
-    setSelectedTech(tech);
-    setTechModalOpen(true);
-  };
+  const [selectedRegion, setSelectedRegion] = useState("UK");
+  const [expandedCard, setExpandedCard] = useState<number | null>(null);
+  const [expandedTech, setExpandedTech] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-mesh">
       <Navigation />
-      
+
       {/* Hero Section */}
-      <section id="hero" className="min-h-[80vh] flex items-center gradient-bg">
-        <div className="container mx-auto px-6 text-center">
-          <div className="max-w-5xl mx-auto">
+      <section
+        id="hero"
+        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-background/50 to-primary/5" />
+        <div className="container relative z-10 mx-auto px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="max-w-5xl mx-auto space-y-8"
+          >
             <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2, type: "spring" }}
+              className="flex justify-center mb-8"
             >
-              <motion.span 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="text-pastel-green font-semibold text-lg"
-              >
-                An Evidence-Based Innovation Platform
-              </motion.span>
-              <motion.h2 
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="text-4xl md:text-7xl font-bold leading-tight my-6 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent"
-              >
-                Can AI Calls Shield Women from Violence?
-              </motion.h2>
-              <motion.p 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.7 }}
-                className="text-lg md:text-xl text-gray-600 mb-8 max-w-4xl mx-auto"
-              >
-                This interactive platform explores how artificial intelligence can transform the widely-used safety tactic of fake phone calls into a powerful deterrent against violence towards women and girls in public spaces.
-              </motion.p>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.9 }}
-                className="space-y-4 md:space-y-0 md:space-x-4 md:flex md:justify-center"
-              >
-                <a 
-                  href="#theory" 
-                  className="bg-pastel-green text-white font-bold py-4 px-8 rounded-full hover:bg-primary-600 transition-all duration-300 transform hover:scale-105 shadow-lg inline-block"
-                >
-                  Explore the Science
-                </a>
-                <a 
-                  href="#concept" 
-                  className="border-2 border-pastel-green text-pastel-green font-bold py-4 px-8 rounded-full hover:bg-pastel-green hover:text-white transition-all duration-300 inline-block"
-                >
-                  See the Solution
-                </a>
-              </motion.div>
+              <div className="relative">
+                <Shield className="h-20 w-20 text-primary animate-bounce-subtle p-2" />
+                <div className="absolute inset-0 bg-primary/20 rounded-full animate-glow" />
+              </div>
             </motion.div>
-          </div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="text-5xl md:text-7xl lg:text-8xl font-black leading-tight"
+            >
+              <span className="text-gradient animate-text">Can AI Calls</span>
+              <br />
+              <span className="text-foreground">Shield Women?</span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
+            >
+              Exploring how artificial intelligence can transform the
+              widely-used safety tactic of fake phone calls into a powerful
+              deterrent against violence.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8"
+            >
+              <Button
+                variant="gradient"
+                size="xl"
+                className="group max-sm:w-full max-sm:mx-20"
+                onClick={() =>
+                  document
+                    .getElementById("theory")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
+                Explore the Science
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+              <Button
+                variant="outline"
+                size="xl"
+                className="max-sm:w-full max-sm:mx-20"
+                onClick={() =>
+                  document
+                    .getElementById("concept")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
+                See the Solution
+              </Button>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
       {/* Theory Section */}
-      <section id="theory" className="py-16 md:py-24 bg-white">
+      <section id="theory" className="py-24 md:py-32">
         <div className="container mx-auto px-6">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center max-w-3xl mx-auto"
+            className="text-center max-w-4xl mx-auto mb-16"
           >
-            <h3 className="text-3xl md:text-4xl font-bold mb-4">Why Phone Calls Deter Violence</h3>
-            <p className="text-gray-600 mb-12">
-              The use of a phone call as a safety strategy isn't random; it's rooted in established criminological and psychological principles. It works by subtly altering the dynamics of a situation from three key perspectives.
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-gradient pb-2">
+              The Science Behind Deterrence
+            </h2>
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              Phone calls as safety tools aren&apos;t random—they&apos;re
+              grounded in established criminological theories that explain human
+              behavior in threatening situations.
             </p>
           </motion.div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { type: 'victim', icon: '🚶‍♀️', title: 'The User\'s Shield', desc: 'For the user, a phone call is a non-confrontational way to signal non-isolation, creating a "social shield" and a sense of "invited space" that reduces feelings of vulnerability.' },
-              { type: 'perpetrator', icon: '🤔', title: 'The Perpetrator\'s Calculus', desc: 'For a potential perpetrator, a person on the phone is no longer an easy, isolated target. The call increases the perceived risk of being identified, reported, or confronted.' },
-              { type: 'bystander', icon: '👁️', title: 'The Remote Guardian', desc: 'The call simulates the presence of a "remote bystander" or "capable guardian" who is aware of the situation, disrupting the harasser\'s confidence that their actions are unobserved.' }
-            ].map((card, index) => (
-              <motion.div
-                key={card.type}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
-                whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                className="glass-card p-6 rounded-2xl cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300"
-                onClick={() => handleTheoryCardClick(card.type as keyof typeof theoryModals)}
-              >
-                <div className="flex items-center mb-4">
-                  <span className="text-4xl mr-4 animate-float">{card.icon}</span>
-                  <h4 className="font-bold text-xl text-gray-800">{card.title}</h4>
-                </div>
-                <p className="text-gray-600">{card.desc}</p>
-              </motion.div>
-            ))}
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            {theoryCards.map((card, index) => {
+              const isExpanded = expandedCard === index;
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.2 }}
+                  layout
+                >
+                  <Card
+                    className="cursor-pointer hover-lift glass-effect group overflow-hidden"
+                    onClick={() => setExpandedCard(isExpanded ? null : index)}
+                  >
+                    <CardHeader className="text-center pb-4">
+                      <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                        <card.icon className="h-8 w-8 text-primary" />
+                      </div>
+                      <CardTitle className="text-2xl group-hover:text-primary transition-colors">
+                        {card.title}
+                      </CardTitle>
+                      <CardDescription className="text-primary font-medium">
+                        {card.subtitle}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground leading-relaxed mb-4">
+                        {card.description}
+                      </p>
+
+                      <motion.div
+                        initial={false}
+                        animate={{
+                          height: isExpanded ? "auto" : 0,
+                          opacity: isExpanded ? 1 : 0,
+                        }}
+                        transition={{
+                          duration: 0.4,
+                          ease: [0.4, 0.0, 0.2, 1],
+                        }}
+                        className="overflow-hidden"
+                      >
+                        <div className="border-t border-border/50 pt-4 mt-4">
+                          <h4 className="font-semibold text-lg mb-3 text-primary">
+                            Key Mechanisms:
+                          </h4>
+                          <ul className="space-y-3">
+                            {card.details.map((detail, idx) => (
+                              <motion.li
+                                key={idx}
+                                className="flex items-start gap-2"
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{
+                                  opacity: isExpanded ? 1 : 0,
+                                  x: isExpanded ? 0 : -10,
+                                }}
+                                transition={{
+                                  delay: isExpanded ? idx * 0.1 + 0.2 : 0,
+                                  duration: 0.3,
+                                }}
+                              >
+                                <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                                <span className="text-muted-foreground leading-relaxed">
+                                  {detail}
+                                </span>
+                              </motion.li>
+                            ))}
+                          </ul>
+                        </div>
+                      </motion.div>
+
+                      <div className="flex justify-center mt-4">
+                        <motion.div
+                          animate={{ rotate: isExpanded ? 180 : 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="text-primary"
+                        >
+                          <ArrowRight className="h-5 w-5 rotate-90" />
+                        </motion.div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* Evidence Section */}
-      <section id="evidence" className="py-16 md:py-24 gradient-bg">
+      <section id="evidence" className="py-24 md:py-32 bg-muted/30">
         <div className="container mx-auto px-6">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center max-w-3xl mx-auto"
+            className="text-center max-w-4xl mx-auto mb-16"
           >
-            <h3 className="text-3xl md:text-4xl font-bold mb-4">The Statistical Reality</h3>
-            <p className="text-gray-600 mb-12">
-              VAWG in public spaces is a documented global crisis, and using a phone for safety is a common response. The data reveals the scale of the problem and underscores why such deterrent strategies are so prevalent.
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-gradient pb-2">
+              The Data Tells the Story
+            </h2>
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              Global statistics reveal the urgent need for innovative safety
+              solutions in public spaces.
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-5 gap-8 mb-16">
-            <motion.div 
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 mb-16 mx-auto">
+            <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="lg:col-span-2 space-y-6"
+              className="space-y-6"
             >
-              {[
-                { title: 'Pervasive Underreporting', desc: 'Fewer than 10% of women who experience violence report it to the police. Street harassment is even less likely to be reported, often seen as "not serious enough" or met with fear of blame.' },
-                { title: 'The "Safety Work" Burden', desc: 'Women constantly perform cognitive and emotional labor—planning routes, choosing attire, staying vigilant—to stay safe. This "safety work" is an invisible tax on their freedom.' },
-                { title: 'A Common Tactic', desc: 'A GSMA report found 68-94% of women in 11 developing countries feel safer with a mobile phone, using it for reassurance and to deter harassers.' }
-              ].map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.2 }}
-                  className="glass-card p-6 rounded-xl border border-pastel-green/20"
-                >
-                  <h4 className="font-bold text-lg mb-2 text-gray-800">{item.title}</h4>
-                  <p className="text-sm text-gray-600">{item.desc}</p>
-                </motion.div>
-              ))}
+              <Card className="glass-effect">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart3 className="h-5 w-5 text-primary" />
+                    Global Reality Check
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="p-4 bg-destructive/10 rounded-lg border border-destructive/20">
+                      <h4 className="font-semibold text-destructive mb-2">
+                        Underreporting Crisis
+                      </h4>
+                      <p className="text-sm text-muted-foreground">
+                        Less than 10% of violence against women is reported to
+                        authorities, creating a massive gap in safety response.
+                      </p>
+                    </div>
+                    <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
+                      <h4 className="font-semibold text-primary mb-2">
+                        The Safety Work Burden
+                      </h4>
+                      <p className="text-sm text-muted-foreground">
+                        Women perform constant cognitive labor—route planning,
+                        attire choices, vigilance—an invisible tax on freedom.
+                      </p>
+                    </div>
+                    <div className="p-4 bg-accent rounded-lg border">
+                      <h4 className="font-semibold mb-2">
+                        Mobile Safety Strategy
+                      </h4>
+                      <p className="text-sm text-muted-foreground">
+                        68-94% of women in developing countries report feeling
+                        safer with mobile phones, using them for deterrence.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="lg:col-span-3"
             >
-              <div className="mb-6">
-                <GlobalPrevalenceChart />
-              </div>
+              <Card className="glass-effect h-full">
+                <CardHeader>
+                  <CardTitle>Global Prevalence</CardTitle>
+                  <CardDescription>
+                    Lifetime non-partner sexual violence (WHO estimates)
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <GlobalPrevalenceChart />
+                </CardContent>
+              </Card>
             </motion.div>
           </div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-8"
+            className="text-center max-w-6xl mx-auto"
           >
-            <h4 className="text-2xl font-bold mb-4">Regional Perspectives</h4>
-            <div className="flex flex-wrap justify-center gap-2 mb-8">
+            <h3 className="text-3xl font-bold mb-8">Regional Perspectives</h3>
+            <div className="flex flex-wrap justify-center gap-4 mb-8">
               {Object.keys(regionalData).map((region) => (
-                <button
+                <Button
                   key={region}
+                  variant={selectedRegion === region ? "default" : "outline"}
                   onClick={() => setSelectedRegion(region)}
-                  className={`py-2 px-4 rounded-full transition-all duration-300 ${
-                    selectedRegion === region
-                      ? 'bg-pastel-green text-white shadow-lg'
-                      : 'bg-white text-gray-700 hover:bg-pastel-mint'
-                  }`}
+                  className="transition-all duration-300"
                 >
                   {region}
-                </button>
+                </Button>
               ))}
             </div>
-            <RegionalDataChart 
-              region={selectedRegion} 
-              data={regionalData[selectedRegion as keyof typeof regionalData]} 
-            />
+            <Card className="glass-effect">
+              <CardContent className="p-8">
+                <RegionalDataChart
+                  region={selectedRegion}
+                  data={
+                    regionalData[selectedRegion as keyof typeof regionalData]
+                  }
+                />
+              </CardContent>
+            </Card>
           </motion.div>
         </div>
       </section>
 
       {/* App Concept Section */}
-      <section id="concept" className="py-16 md:py-24 bg-white">
+      <section id="concept" className="py-24 md:py-32">
         <div className="container mx-auto px-6">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center max-w-3xl mx-auto"
+            className="text-center max-w-4xl mx-auto mb-16"
           >
-            <h3 className="text-3xl md:text-4xl font-bold mb-4">The AI-Simulated Call App</h3>
-            <p className="text-gray-600 mb-8">
-              Translating this deterrent strategy into a reliable app requires careful consideration of technology, user experience, and ethics. A successful app must be more than just a "fake call" button.
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-gradient pb-2">
+              AI-Powered Safety Shield
+            </h2>
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              Transforming intuitive safety tactics into reliable, intelligent
+              technology requires careful balance of innovation and ethics.
             </p>
           </motion.div>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-8 flex flex-wrap justify-center gap-2"
-          >
-            {[
-              { id: 'features', label: 'Core Features' },
-              { id: 'design', label: 'Design Principles' },
-              { id: 'ethics', label: 'Ethical Considerations' }
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`py-3 px-6 text-base font-medium transition-all duration-300 rounded-full ${
-                  activeTab === tab.id
-                    ? 'bg-pastel-green text-white shadow-lg'
-                    : 'text-gray-600 hover:text-pastel-green hover:bg-pastel-mint'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </motion.div>
+          <Tabs defaultValue="features" className="max-w-6xl mx-auto max-sm:mb-30">
+            <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-0 mb-12 max-sm:mb-[130px]">
+              <TabsTrigger value="features" className="text-sm sm:text-base py-2 sm:py-3">
+                Core Features
+              </TabsTrigger>
+              <TabsTrigger value="design" className="text-sm sm:text-base py-2 sm:py-3">
+                Design Principles
+              </TabsTrigger>
+              <TabsTrigger value="ethics" className="text-sm sm:text-base py-2 sm:py-3">
+                Ethical Framework
+              </TabsTrigger>
+            </TabsList>
 
-          <motion.div 
-            key={activeTab}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            {activeTab === 'features' && (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <TabsContent value="features" className="space-y-8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
-                  { icon: '🤖', title: 'Hyper-Realistic AI Voice', desc: 'Utilizes advanced text-to-speech to generate a natural, convincing human voice with varied personas and tones, crucial for believability.' },
-                  { icon: '🤫', title: 'Discreet, Rapid Activation', desc: 'Can be initiated with minimal effort via physical buttons or a simple screen tap, avoiding conspicuous actions that could alert an aggressor.' },
-                  { icon: '🗣️', title: 'Strategic Conversation Scripts', desc: 'The AI\'s dialogue is designed to imply guardianship or imminent arrival (e.g., "I see you, I\'m just around the corner"), maximizing deterrent effect.' },
-                  { icon: '🆘', title: 'Optional Tiered Alerts', desc: 'The core function is deterrence. A secondary, opt-in feature could allow alerting trusted contacts with location data if a situation escalates.' },
-                  { icon: '📸', title: 'Camouflaged Interface', desc: 'The app\'s interface mimics a standard call screen (e.g., WhatsApp), allowing discreet use without revealing it\'s a safety tool.' },
-                  { icon: '✔️', title: 'User Control & Feedback', desc: 'Provides subtle feedback to the user that the app is active and offers a simple, clear way to end the simulated call at any time.' }
+                  {
+                    icon: Brain,
+                    title: "Hyper-Realistic AI Voice",
+                    desc: "Advanced text-to-speech generating natural, convincing conversation with varied personas and tones.",
+                  },
+                  {
+                    icon: Zap,
+                    title: "Instant Activation",
+                    desc: "Discreet, one-tap activation avoiding conspicuous actions that could alert potential aggressors.",
+                  },
+                  {
+                    icon: Shield,
+                    title: "Strategic Scripts",
+                    desc: "AI dialogue designed to imply guardianship or imminent arrival, maximizing deterrent effect.",
+                  },
+                  {
+                    icon: AlertTriangle,
+                    title: "Tiered Alerts",
+                    desc: "Optional escalation to trusted contacts with location data if situations deteriorate.",
+                  },
+                  {
+                    icon: Eye,
+                    title: "Camouflaged Interface",
+                    desc: "Interface mimics standard call screens, allowing discreet use without revealing safety purpose.",
+                  },
+                  {
+                    icon: CheckCircle,
+                    title: "User Control",
+                    desc: "Clear feedback and simple termination options maintain user agency throughout interaction.",
+                  },
                 ].map((feature, index) => (
                   <motion.div
                     key={index}
@@ -366,25 +588,58 @@ export default function Home() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className="glass-card p-6 rounded-xl text-center hover:shadow-lg transition-all duration-300"
                   >
-                    <div className="text-4xl mb-4">{feature.icon}</div>
-                    <h5 className="font-bold text-lg mb-2 text-gray-800">{feature.title}</h5>
-                    <p className="text-sm text-gray-600">{feature.desc}</p>
+                    <Card className="glass-effect hover-lift h-full">
+                      <CardHeader className="text-center">
+                        <feature.icon className="h-12 w-12 text-primary mx-auto mb-4" />
+                        <CardTitle className="text-xl">
+                          {feature.title}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-muted-foreground leading-relaxed">
+                          {feature.desc}
+                        </p>
+                      </CardContent>
+                    </Card>
                   </motion.div>
                 ))}
               </div>
-            )}
+            </TabsContent>
 
-            {activeTab === 'design' && (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <TabsContent value="design" className="space-y-8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
-                  { icon: '🧠', title: 'Minimal Cognitive Load', desc: 'The design must be radically simple. Under stress, complex navigation fails. The core function must be accessible in one or two intuitive steps.' },
-                  { icon: '👥', title: 'Survivor-Centric Co-Design', desc: 'Developed *with* women, not *for* them. Incorporating diverse lived experiences is essential to create a tool that is genuinely useful and not just technically clever.' },
-                  { icon: '♿', title: 'Accessibility First', desc: 'The app must be usable by people with diverse abilities, considering factors like motor skills under stress or visual impairments.' },
-                  { icon: '🚫', title: 'Avoid Feature Creep', desc: 'Resist the urge to add too many features. The app\'s primary purpose—initiating a deterrent call—must remain uncluttered and paramount.' },
-                  { icon: '💡', title: 'Clear, Unambiguous Icons', desc: 'Visual elements should be instantly recognizable. Any secondary buttons (e.g., SOS, Record) must have clear icons to prevent confusion in a panic.' },
-                  { icon: '🔁', title: 'Rigorous Scenario Testing', desc: 'Usability must be tested in simulated high-stress scenarios to identify and eliminate any points of friction or confusion.' }
+                  {
+                    icon: Brain,
+                    title: "Minimal Cognitive Load",
+                    desc: "Radically simple design. Under stress, complex navigation fails. Core function must be one-tap accessible.",
+                  },
+                  {
+                    icon: Users,
+                    title: "Co-Design Approach",
+                    desc: "Developed *with* diverse women, not *for* them. Lived experiences inform every design decision.",
+                  },
+                  {
+                    icon: Heart,
+                    title: "Accessibility First",
+                    desc: "Usable by people with diverse abilities, considering motor skills under stress and visual impairments.",
+                  },
+                  {
+                    icon: Target,
+                    title: "Focused Purpose",
+                    desc: "Resist feature creep. Primary purpose—deterrent calls—remains uncluttered and paramount.",
+                  },
+                  {
+                    icon: Eye,
+                    title: "Clear Iconography",
+                    desc: "Instantly recognizable visual elements. Secondary buttons must have unambiguous icons.",
+                  },
+                  {
+                    icon: Code,
+                    title: "Stress Testing",
+                    desc: "Rigorous usability testing in simulated high-stress scenarios to eliminate friction points.",
+                  },
                 ].map((principle, index) => (
                   <motion.div
                     key={index}
@@ -392,25 +647,64 @@ export default function Home() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className="glass-card p-6 rounded-xl text-center hover:shadow-lg transition-all duration-300"
                   >
-                    <div className="text-4xl mb-4">{principle.icon}</div>
-                    <h5 className="font-bold text-lg mb-2 text-gray-800">{principle.title}</h5>
-                    <p className="text-sm text-gray-600">{principle.desc}</p>
+                    <Card className="glass-effect hover-lift h-full">
+                      <CardHeader className="text-center">
+                        <principle.icon className="h-12 w-12 text-primary mx-auto mb-4" />
+                        <CardTitle className="text-xl">
+                          {principle.title}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-muted-foreground leading-relaxed">
+                          {principle.desc}
+                        </p>
+                      </CardContent>
+                    </Card>
                   </motion.div>
                 ))}
               </div>
-            )}
+            </TabsContent>
 
-            {activeTab === 'ethics' && (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <TabsContent value="ethics" className="space-y-8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
-                  { icon: '🔒', title: 'Privacy & Data Security', desc: 'Minimal data collection is key. Any data stored must be encrypted and protected against breaches or misuse by abusers.', color: 'border-red-200 bg-red-50' },
-                  { icon: '🛡️', title: 'False Sense of Security', desc: 'The app must be marketed responsibly, clarifying it is a deterrent, not a foolproof guarantee of safety, to avoid encouraging risky behavior.', color: 'border-red-200 bg-red-50' },
-                  { icon: '⚖️', title: 'Avoiding Victim Blame', desc: 'The design must not shift the burden of safety onto the user. It\'s a tool, not a replacement for societal responsibility to prevent violence.', color: 'border-red-200 bg-red-50' },
-                  { icon: '📈', title: 'Risk of Escalation', desc: 'A determined perpetrator who realizes the call is fake might become more aggressive. This is a critical risk that cannot be eliminated.', color: 'border-red-200 bg-red-50' },
-                  { icon: '🤖', title: 'Algorithmic Bias', desc: 'AI voices and scripts must be inclusive and relatable to diverse users to avoid being less effective for marginalized groups.', color: 'border-red-200 bg-red-50' },
-                  { icon: '📋', title: 'Clear Accountability', desc: 'Clear disclaimers are needed. Who is accountable if the app fails to deter an attack? The app cannot be a substitute for emergency services.', color: 'border-red-200 bg-red-50' }
+                  {
+                    icon: Shield,
+                    title: "Privacy & Security",
+                    desc: "Minimal data collection. All stored data encrypted and protected against breaches or misuse.",
+                    color: "destructive",
+                  },
+                  {
+                    icon: AlertTriangle,
+                    title: "No False Promises",
+                    desc: "Responsible marketing clarifying it's a deterrent, not a guarantee, avoiding risky behavior encouragement.",
+                    color: "destructive",
+                  },
+                  {
+                    icon: Heart,
+                    title: "Avoid Victim Blame",
+                    desc: "Design must not shift safety burden to users. It's a tool, not replacement for societal responsibility.",
+                    color: "destructive",
+                  },
+                  {
+                    icon: Brain,
+                    title: "Escalation Risk",
+                    desc: "Determined perpetrators discovering fake calls might become more aggressive. This risk cannot be eliminated.",
+                    color: "destructive",
+                  },
+                  {
+                    icon: Users,
+                    title: "Inclusive AI",
+                    desc: "AI voices and scripts must be inclusive and relatable to diverse users, avoiding marginalization.",
+                    color: "destructive",
+                  },
+                  {
+                    icon: CheckCircle,
+                    title: "Clear Accountability",
+                    desc: "Transparent disclaimers about limitations. Cannot substitute for emergency services or guarantee safety.",
+                    color: "destructive",
+                  },
                 ].map((ethical, index) => (
                   <motion.div
                     key={index}
@@ -418,66 +712,171 @@ export default function Home() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    className={`${ethical.color} p-6 rounded-xl text-center hover:shadow-lg transition-all duration-300 border`}
                   >
-                    <div className="text-4xl mb-4">{ethical.icon}</div>
-                    <h5 className="font-bold text-lg mb-2 text-red-800">{ethical.title}</h5>
-                    <p className="text-sm text-gray-700">{ethical.desc}</p>
+                    <Card className="glass-effect hover-lift border-destructive/20 h-full">
+                      <CardHeader className="text-center">
+                        <ethical.icon className="h-12 w-12 text-destructive mx-auto mb-4" />
+                        <CardTitle className="text-xl text-destructive">
+                          {ethical.title}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-muted-foreground leading-relaxed">
+                          {ethical.desc}
+                        </p>
+                      </CardContent>
+                    </Card>
                   </motion.div>
                 ))}
               </div>
-            )}
-          </motion.div>
+            </TabsContent>
+          </Tabs>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mt-16"
+            className="mt-20"
           >
-            <h4 className="text-2xl font-bold text-center mb-8">Current Technology Landscape</h4>
+            <h3 className="text-3xl font-bold text-center mb-12">
+              Current Technology Landscape
+            </h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {techSolutions.map((tech, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ y: -5, transition: { duration: 0.3 } }}
-                  className="glass-card p-6 rounded-2xl cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 text-center"
-                  onClick={() => handleTechCardClick(tech)}
-                >
-                  <div className="text-5xl mb-4">{tech.icon}</div>
-                  <h5 className="font-bold text-lg text-gray-800">{tech.category}</h5>
-                  <p className="text-sm text-gray-600 mt-2">{tech.description}</p>
-                </motion.div>
-              ))}
+              {techSolutions.map((tech, index) => {
+                const isExpanded = expandedTech === index;
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    layout
+                  >
+                    <Card
+                      className="cursor-pointer hover-lift glass-effect group overflow-hidden"
+                      onClick={() => setExpandedTech(isExpanded ? null : index)}
+                    >
+                      <CardHeader className="text-center">
+                        <tech.icon className="h-12 w-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform" />
+                        <CardTitle className="text-xl group-hover:text-primary transition-colors">
+                          {tech.title}
+                        </CardTitle>
+                        <p className="text-sm text-muted-foreground mt-2">
+                          Examples: {tech.examples}
+                        </p>
+                      </CardHeader>
+
+                      <motion.div
+                        initial={false}
+                        animate={{
+                          height: isExpanded ? "auto" : 0,
+                          opacity: isExpanded ? 1 : 0,
+                        }}
+                        transition={{
+                          duration: 0.4,
+                          ease: [0.4, 0.0, 0.2, 1],
+                        }}
+                        className="overflow-hidden"
+                      >
+                        <CardContent className="pt-0">
+                          <div className="border-t border-border/50 pt-4 space-y-4">
+                            <motion.div
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{
+                                opacity: isExpanded ? 1 : 0,
+                                y: isExpanded ? 0 : 10,
+                              }}
+                              transition={{
+                                delay: isExpanded ? 0.2 : 0,
+                                duration: 0.3,
+                              }}
+                            >
+                              <h4 className="font-semibold text-green-600 mb-2">
+                                ✓ Strengths
+                              </h4>
+                              <p className="text-sm text-muted-foreground leading-relaxed">
+                                {tech.pros}
+                              </p>
+                            </motion.div>
+                            <motion.div
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{
+                                opacity: isExpanded ? 1 : 0,
+                                y: isExpanded ? 0 : 10,
+                              }}
+                              transition={{
+                                delay: isExpanded ? 0.3 : 0,
+                                duration: 0.3,
+                              }}
+                            >
+                              <h4 className="font-semibold text-destructive mb-2">
+                                ✗ Limitations
+                              </h4>
+                              <p className="text-sm text-muted-foreground leading-relaxed">
+                                {tech.cons}
+                              </p>
+                            </motion.div>
+                          </div>
+                        </CardContent>
+                      </motion.div>
+
+                      <div className="flex justify-center pb-4">
+                        <motion.div
+                          animate={{ rotate: isExpanded ? 180 : 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="text-primary"
+                        >
+                          <ArrowRight className="h-4 w-4 rotate-90" />
+                        </motion.div>
+                      </div>
+                    </Card>
+                  </motion.div>
+                );
+              })}
             </div>
           </motion.div>
         </div>
       </section>
 
       {/* Context Section */}
-      <section id="context" className="py-16 md:py-24 gradient-bg">
+      <section id="context" className="py-24 md:py-32 bg-muted/30">
         <div className="container mx-auto px-6">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center max-w-3xl mx-auto"
+            className="text-center max-w-4xl mx-auto mb-16"
           >
-            <h3 className="text-3xl md:text-4xl font-bold mb-4">Beyond the App: A Holistic Approach</h3>
-            <p className="text-gray-600 mb-12">
-              A technology-based tool is not a silver bullet. An AI-simulated call app is most effective when situated within a broader ecosystem of prevention strategies that address the root causes and environmental factors of VAWG.
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-gradient pb-2">
+              Beyond Technology
+            </h2>
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              AI-powered safety tools are most effective within broader
+              ecosystems addressing root causes and environmental factors.
             </p>
           </motion.div>
-          
-          <div className="grid md:grid-cols-3 gap-8 text-center max-w-5xl mx-auto">
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {[
-              { icon: '🏙️', title: 'Environmental Design (CPTED)', desc: 'The app\'s deterrent effect is amplified in well-lit, visible spaces. It complements, but cannot replace, safe urban planning, improved lighting, and well-maintained public areas.' },
-              { icon: '🎓', title: 'Education & Cultural Shift', desc: 'Long-term prevention requires challenging harmful norms. The app is a tool for individual safety, while education on consent and bystander intervention addresses root causes.' },
-              { icon: '⚖️', title: 'Policy & Legal Frameworks', desc: 'Strong laws and policies create a context of accountability. The app empowers individuals, while robust policies ensure systemic response and support for survivors.' }
+              {
+                icon: Lightbulb,
+                title: "Environmental Design",
+                subtitle: "CPTED Principles",
+                desc: "Well-lit, visible spaces amplify deterrent effects. Technology complements but cannot replace thoughtful urban planning.",
+              },
+              {
+                icon: Users,
+                title: "Education & Culture",
+                subtitle: "Norm Change",
+                desc: "Long-term prevention requires challenging harmful attitudes. Apps provide individual safety while education addresses causes.",
+              },
+              {
+                icon: Shield,
+                title: "Policy Frameworks",
+                subtitle: "Systemic Response",
+                desc: "Strong laws create accountability contexts. Technology empowers individuals while policy ensures institutional support.",
+              },
             ].map((item, index) => (
               <motion.div
                 key={index}
@@ -485,11 +884,21 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.2 }}
-                className="glass-card p-6 rounded-xl border border-pastel-green/20"
               >
-                <div className="text-4xl mb-4">{item.icon}</div>
-                <h4 className="font-bold text-lg mb-2 text-gray-800">{item.title}</h4>
-                <p className="text-sm text-gray-600">{item.desc}</p>
+                <Card className="glass-effect hover-lift h-full text-center">
+                  <CardHeader>
+                    <item.icon className="h-16 w-16 text-primary mx-auto mb-4" />
+                    <CardTitle className="text-2xl">{item.title}</CardTitle>
+                    <CardDescription className="text-primary font-medium">
+                      {item.subtitle}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </CardContent>
+                </Card>
               </motion.div>
             ))}
           </div>
@@ -497,40 +906,48 @@ export default function Home() {
       </section>
 
       {/* Challenge Section */}
-      <section id="challenge" className="py-16 md:py-24 bg-white">
+      <section id="challenge" className="py-24 md:py-32">
         <div className="container mx-auto px-6">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center max-w-3xl mx-auto"
+            className="text-center max-w-4xl mx-auto mb-16"
           >
-            <h3 className="text-3xl md:text-4xl font-bold mb-4">The Innovation Challenge: Principles for Impact</h3>
-            <p className="text-gray-600 mb-12">
-              Your goal is to build solutions that can make a real difference. As you ideate, keep these evidence-based principles in mind. They are your guide to creating tools that are ethical, effective, and truly empowering.
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-gradient pb-2">
+              Innovation Principles
+            </h2>
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              Evidence-based guidelines for creating ethical, effective, and
+              truly empowering safety solutions.
             </p>
           </motion.div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {[
-              { num: '01', title: 'Be Survivor-Centric & Intersectional', desc: 'Design *with*, not *for*. Prioritize the diverse needs, safety, and agency of all women, especially those from marginalized communities. A one-size-fits-all approach will fail.' },
-              { num: '02', title: 'Aim for Prevention & Empowerment', desc: 'Move beyond reactive SOS alerts. How can technology help prevent violence, support bystander action, or empower users with information and community support?' },
-              { num: '03', title: 'Tackle Root Causes, Not Just Symptoms', desc: 'Explore how tech can challenge harmful norms or educate on consent. Don\'t just place the burden of safety on the victim; address perpetrator behavior.' },
-              { num: '04', title: 'Embed Ethics from Day One', desc: 'Prioritize data privacy, security, and informed consent. Actively mitigate algorithmic bias. Your solution must not create new vulnerabilities.' },
-              { num: '05', title: 'Integrate, Don\'t Isolate', desc: 'How can your prototype connect with existing community efforts, support services, or public infrastructure? Technology is most powerful as part of a holistic system.' },
-              { num: '06', title: 'Reduce the "Safety Work" Burden', desc: 'Women already perform constant emotional and cognitive labor to stay safe. Your solution should alleviate this burden, not add to it with complex requirements.' }
-            ].map((principle, index) => (
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {innovationPrinciples.map((principle, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="glass-card p-6 rounded-xl border border-pastel-green/20"
               >
-                <span className="font-bold text-lg text-pastel-green">{principle.num}.</span>
-                <h4 className="font-bold text-lg my-2 text-gray-800">{principle.title}</h4>
-                <p className="text-sm text-gray-600">{principle.desc}</p>
+                <Card className="glass-effect hover-lift h-full">
+                  <CardHeader>
+                    <div className="flex items-center gap-4 mb-4">
+                      <span className="text-3xl font-bold text-primary">
+                        {principle.number}
+                      </span>
+                      <principle.icon className="h-8 w-8 text-primary" />
+                    </div>
+                    <CardTitle className="text-xl">{principle.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {principle.description}
+                    </p>
+                  </CardContent>
+                </Card>
               </motion.div>
             ))}
           </div>
@@ -538,41 +955,32 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white">
-        <div className="container mx-auto px-6 py-8 text-center">
+      <footer className="bg-card border-t py-12">
+        <div className="container mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
+            className="space-y-4"
           >
-            <p className="mb-2">This interactive platform combines research from "The Simulated Safety Net" and "Tackling Violence Against Women and Girls in Public Spaces" reports.</p>
-            <p className="text-xs text-gray-400">Data synthesized from sources including UN Women, WHO, national statistics offices, and academic research to inform innovators and changemakers.</p>
+            <div className="flex justify-center items-center gap-3 mb-6">
+              <Shield className="h-8 w-8 text-primary" />
+              <span className="text-2xl font-bold text-gradient">
+                HerSignal
+              </span>
+            </div>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Combining research from the &quot;Tackling Violence against Women
+              and Girls in Public Spaces Hackathon&quot; to inform
+              evidence-based innovation.
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Data from UN Women, WHO, national statistics offices, and academic
+              research • Built for innovators and changemakers
+            </p>
           </motion.div>
         </div>
       </footer>
-
-      {/* Modals */}
-      <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-        <h4 className="text-2xl font-bold text-gray-800 mb-4">{modalContent.title}</h4>
-        <div dangerouslySetInnerHTML={{ __html: modalContent.content }} />
-      </Modal>
-
-      <Modal isOpen={techModalOpen} onClose={() => setTechModalOpen(false)}>
-        <div className="text-5xl text-center mb-4">{selectedTech.icon}</div>
-        <h4 className="text-2xl font-bold text-center mb-2 text-gray-800">{selectedTech.category}</h4>
-        <p className="text-center text-sm text-gray-500 mb-6">Examples: {selectedTech.examples}</p>
-        
-        <div className="space-y-4 text-left">
-          <div>
-            <h5 className="font-semibold text-green-700">✓ Strengths & Potential</h5>
-            <p className="text-sm text-gray-700 mt-1">{selectedTech.pros}</p>
-          </div>
-          <div>
-            <h5 className="font-semibold text-red-700">✗ Weaknesses & Critiques</h5>
-            <p className="text-sm text-gray-700 mt-1">{selectedTech.cons}</p>
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 }

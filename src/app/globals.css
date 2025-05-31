@@ -1,57 +1,78 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
 }
 
-html {
-  scroll-behavior: smooth;
+@layer components {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent;
+  }
+  
+  .glass-effect {
+    @apply bg-card/80 backdrop-blur-sm border border-border/50 shadow-xl rounded-lg;
+  }
+  
+  .hover-lift {
+    @apply transition-all duration-200 hover:scale-105 hover:shadow-2xl;
+  }
+  
+  .gradient-mesh {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%);
+  }
 }
 
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: #fefdfb;
-  color: #403d39;
-  line-height: 1.6;
-  antialiased: true;
+@layer utilities {
+  .animate-bounce-subtle {
+    animation: bounce-subtle 2s ease-in-out infinite;
+  }
+  
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+  
+  .animate-text {
+    background-size: 400% 400%;
+    animation: gradient 2.5s ease infinite;
+  }
 }
 
-.nav-link {
-  position: relative;
-  transition: color 0.3s ease;
+@keyframes bounce-subtle {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-5px); 
+  }
 }
 
-.nav-link.active,
-.nav-link:hover {
-  color: #a8e6a3;
+@keyframes glow {
+  0% { 
+    box-shadow: 0 0 5px #8b5cf6, 0 0 10px #8b5cf6, 0 0 15px #8b5cf6; 
+  }
+  100% { 
+    box-shadow: 0 0 10px #8b5cf6, 0 0 20px #8b5cf6, 0 0 30px #8b5cf6; 
+  }
 }
 
-.nav-link::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 2px;
-  bottom: -4px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #a8e6a3;
-  transition: width 0.3s ease;
-}
-
-.nav-link.active::after,
-.nav-link:hover::after {
-  width: 100%;
-}
-
-.glass-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(168, 230, 163, 0.2);
-}
-
-.gradient-bg {
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #bbf7d0 100%);
+@keyframes gradient {
+  0% { 
+    background-position: 0% 50%; 
+  }
+  50% { 
+    background-position: 100% 50%; 
+  }
+  100% { 
+    background-position: 0% 50%; 
+  }
 }
