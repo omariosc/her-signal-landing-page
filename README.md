@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HerSignal
 
-## Getting Started
+![HerSignal Logo](https://via.placeholder.com/800x200/a8e6a3/ffffff?text=HerSignal)
 
-First, run the development server:
+An Evidence-Based Innovation Platform exploring how AI-simulated phone calls can serve as a deterrent against violence towards women and girls in public spaces.
+
+## 🛡️ About
+
+HerSignal combines research from "The Simulated Safety Net" and "Tackling Violence Against Women and Girls in Public Spaces" into an interactive platform that explores the potential of AI technology to transform widely-used safety tactics into powerful deterrents.
+
+## ✨ Features
+
+- **Interactive Data Visualizations**: Explore global and regional statistics on VAWG using Chart.js
+- **Theory Deep-Dives**: Understand the criminological and psychological foundations behind phone call deterrents
+- **Technology Landscape**: Comprehensive overview of current safety tech solutions
+- **Design Principles**: Evidence-based guidelines for ethical and effective innovation
+- **Smooth Animations**: Built with Framer Motion for engaging user experience
+- **Responsive Design**: Optimized for all devices with pastel green theming
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ 
+- npm or yarn
+
+### Installation
+
+1. Clone or download the project
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+### Build for Production
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run build
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Technology Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework**: Next.js 15 with TypeScript
+- **Styling**: Tailwind CSS with custom pastel green theme
+- **Animations**: Framer Motion
+- **Data Visualization**: Chart.js with react-chartjs-2
+- **UI Components**: Custom React components with glass morphism effects
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📊 Data Sources
 
-## Learn More
+This platform synthesizes data from:
+- UN Women
+- World Health Organization (WHO)
+- National statistics offices
+- Academic research papers
+- Stop Street Harassment
+- EU Gender-Based Violence Survey
 
-To learn more about Next.js, take a look at the following resources:
+## 🎯 Innovation Challenge
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+HerSignal serves as a foundation for innovators working on solutions to address VAWG in public spaces. The platform provides:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Evidence-Based Principles** for ethical development
+2. **Current Technology Landscape** analysis
+3. **Design Guidelines** focused on survivor-centric approaches
+4. **Ethical Considerations** for responsible innovation
 
-## Deploy on Vercel
+## 🌟 Key Sections
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **The Theory**: Criminological foundations of phone call deterrents
+- **The Evidence**: Statistical reality and prevalence data
+- **The App Concept**: Detailed exploration of AI-simulated call technology
+- **The Context**: Holistic approaches beyond technology
+- **The Challenge**: Principles for impactful innovation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🤝 Contributing
+
+This platform is designed to inform and inspire innovation in the VAWG prevention space. We encourage:
+
+- Survivor-centric design approaches
+- Intersectional considerations
+- Ethical technology development
+- Community-integrated solutions
+
+## 📝 License
+
+This project is intended for educational and research purposes to support innovation in violence prevention.
+
+## 🔗 Links
+
+- [Live Demo](http://localhost:3000) (when running locally)
+- Research Reports: Included in platform content
+- Data Sources: Referenced throughout the application
+
+## 🙏 Acknowledgments
+
+- UN Women for global leadership on VAWG prevention
+- Academic researchers whose work informs this platform  
+- Survivors and advocates whose voices guide ethical technology development
+- Innovation communities working toward safer public spaces
+
+---
+
+**Built with ❤️ and 🛡️ for a safer world**
