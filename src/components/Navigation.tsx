@@ -31,8 +31,19 @@ const Navigation = () => {
       }
     };
 
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (!target.closest('.resources-dropdown')) {
+        setResourcesDropdownOpen(false);
+      }
+    };
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('click', handleClickOutside);
+    };
   }, []);
 
   const navItems = [
@@ -115,33 +126,37 @@ const Navigation = () => {
                 )}
               </motion.button>
             ))}
-            
-            {/* Resources Dropdown */}
-            <div className="relative">
+
+            {/* Need Help? Dropdown */}
+            <div className="relative resources-dropdown">
               <motion.button
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * navItems.length }}
                 onClick={() => setResourcesDropdownOpen(!resourcesDropdownOpen)}
                 onMouseEnter={() => setResourcesDropdownOpen(true)}
-                onMouseLeave={() => setResourcesDropdownOpen(false)}
-                className="flex items-center text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
+                className="px-3 py-1.5 bg-primary text-primary-foreground text-sm font-medium rounded-full hover:bg-primary/90 transition-colors flex items-center"
               >
-                Resources
-                <ChevronDown className={cn(
-                  "ml-1 h-4 w-4 transition-transform",
-                  resourcesDropdownOpen && "rotate-180"
-                )} />
+                Need Help?
+                <ChevronDown
+                  className={cn(
+                    "ml-1 h-3 w-3 transition-transform",
+                    resourcesDropdownOpen && "rotate-180"
+                  )}
+                />
               </motion.button>
-              
+
               {resourcesDropdownOpen && (
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   onMouseEnter={() => setResourcesDropdownOpen(true)}
-                  onMouseLeave={() => setResourcesDropdownOpen(false)}
-                  className="absolute top-full right-0 mt-2 w-80 glass-effect rounded-lg shadow-lg border p-2 z-50"
+                  onMouseLeave={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  className="absolute top-full right-0 mt-2 w-80 glass-effect rounded-lg shadow-lg border p-2 z-50 resources-dropdown"
                 >
                   {resourceItems.map((resource, index) => (
                     <motion.a
@@ -209,11 +224,13 @@ const Navigation = () => {
                 {item.label}
               </button>
             ))}
-            
-            {/* Resources section for mobile */}
+
+            {/* Need Help? section for mobile */}
             <div className="pt-2 mt-2 border-t border-border/50">
-              <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Resources
+              <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider mt-1">
+                <span className="bg-purple-500/30 w-[min-content] p-2 -ml-1 rounded-lg">
+                  Need Help?
+                </span>
               </div>
               {resourceItems.map((resource) => (
                 <a
