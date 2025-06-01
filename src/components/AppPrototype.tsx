@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Button } from './ui/button'
 import { Card } from './ui/card'
 import DownloadButtons from './DownloadButtons'
@@ -229,27 +229,22 @@ const prototypeScreens = [
 export default function AppPrototype() {
   const [currentScreen, setCurrentScreen] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
-  const [direction, setDirection] = useState<'left' | 'right' | null>(null)
 
   const nextScreen = () => {
     if (isTransitioning) return
-    setDirection('right')
     setIsTransitioning(true)
     setCurrentScreen((prev) => (prev + 1) % prototypeScreens.length)
     setTimeout(() => {
       setIsTransitioning(false)
-      setDirection(null)
     }, 400)
   }
 
   const prevScreen = () => {
     if (isTransitioning) return
-    setDirection('left')
     setIsTransitioning(true)
     setCurrentScreen((prev) => (prev - 1 + prototypeScreens.length) % prototypeScreens.length)
     setTimeout(() => {
       setIsTransitioning(false)
-      setDirection(null)
     }, 400)
   }
 
