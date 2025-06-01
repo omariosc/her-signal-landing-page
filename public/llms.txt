@@ -1,0 +1,32 @@
+# HerSignal - AI-Powered Safety App for Women
+
+## About
+HerSignal is an innovative AI-powered safety application designed to protect women in dangerous situations. The app generates realistic emergency phone calls to help users escape threatening scenarios safely.
+
+## Purpose
+- Primary function: AI-generated emergency simulation calls
+- Target audience: Women seeking personal safety solutions
+- Core technology: AI voice synthesis for realistic emergency scenarios
+- Goal: Provide immediate safety assistance through simulated calls
+
+## Features
+- Instant AI emergency call generation
+- Realistic voice synthesis
+- Quick activation in dangerous situations
+- Privacy-focused design
+- No personal data storage during emergency use
+
+## Safety Focus
+While we present statistics and prevalence data about violence against women, this information serves to highlight the severity of the problem and validate our solution. HerSignal is fundamentally a safety app, not a research tool.
+
+## Technology
+- Next.js web application
+- AI voice synthesis
+- Responsive design for mobile use
+- Fast activation for emergency situations
+
+## Contact
+For more information about HerSignal and women's safety technology, visit our website.
+
+## Keywords
+women safety, personal safety app, AI emergency calls, safety technology, violence prevention, women protection, emergency simulation, AI safety tools

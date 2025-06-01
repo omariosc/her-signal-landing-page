@@ -34,8 +34,26 @@ interface RegionalDataChartProps {
 }
 
 export function RegionalDataChart({ region, data }: RegionalDataChartProps) {
+  // Function to split long labels into multiple lines
+  const formatLabels = (labels: string[]) => {
+    return labels.map(label => {
+      // Split at common breakpoints or after certain character count
+      if (label.length > 20) {
+        const words = label.split(' ');
+        if (words.length >= 2) {
+          const midpoint = Math.ceil(words.length / 2);
+          return [
+            words.slice(0, midpoint).join(' '),
+            words.slice(midpoint).join(' ')
+          ];
+        }
+      }
+      return label;
+    });
+  };
+
   const chartData = {
-    labels: data.labels,
+    labels: formatLabels(data.labels),
     datasets: [
       {
         label: 'Prevalence (%)',
@@ -63,6 +81,12 @@ export function RegionalDataChart({ region, data }: RegionalDataChartProps) {
       y: {
         grid: {
           display: false,
+        },
+        ticks: {
+          maxWidth: 150, // Limit width to force wrapping
+          font: {
+            size: 11, // Slightly smaller font for better fit
+          },
         },
       },
     },
@@ -94,8 +118,10 @@ export function RegionalDataChart({ region, data }: RegionalDataChartProps) {
   };
 
   return (
-    <div className="h-80 md:h-96">
-      <Bar data={chartData} options={options} />
+    <div className="h-80 md:h-96 overflow-x-auto">
+      <div className="min-w-[600px] h-full">
+        <Bar data={chartData} options={options} />
+      </div>
     </div>
   );
 }

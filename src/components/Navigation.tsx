@@ -15,7 +15,7 @@ const Navigation = () => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
       
-      const sections = ['hero', 'theory', 'evidence', 'concept', 'context', 'challenge'];
+      const sections = ['hero', 'prototype', 'theory', 'evidence', 'concept', 'context', 'challenge'];
       const scrollPosition = window.scrollY + 100;
 
       for (const section of sections) {
@@ -35,6 +35,7 @@ const Navigation = () => {
   }, []);
 
   const navItems = [
+    { href: '#prototype', label: 'Download' },
     { href: '#theory', label: 'Theory' },
     { href: '#evidence', label: 'Evidence' },
     { href: '#concept', label: 'Concept' },

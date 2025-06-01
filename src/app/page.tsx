@@ -35,6 +35,8 @@ import {
   RegionalDataChart,
   GlobalPrevalenceChart,
 } from "@/components/ChartComponents";
+import AppPrototype from "@/components/AppPrototype";
+import DownloadButtons from "@/components/DownloadButtons";
 
 const regionalData = {
   UK: {
@@ -237,9 +239,9 @@ export default function Home() {
               transition={{ delay: 0.4 }}
               className="text-5xl md:text-7xl lg:text-8xl font-black leading-tight"
             >
-              <span className="text-gradient animate-text">Can AI Calls</span>
+              <span className="text-gradient animate-text">HerSignal</span>
               <br />
-              <span className="text-foreground">Shield Women?</span>
+              <span className="text-foreground">AI Safety Companion</span>
             </motion.h1>
 
             <motion.p
@@ -248,45 +250,51 @@ export default function Home() {
               transition={{ delay: 0.6 }}
               className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
             >
-              Exploring how artificial intelligence can transform the
-              widely-used safety tactic of fake phone calls into a powerful
-              deterrent against violence.
+              Stay safe with AI-powered emergency calls. Instantly generate realistic conversations to help you escape dangerous situations.
             </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8"
+              className="flex flex-col gap-6 justify-center items-center pt-8"
             >
-              <Button
-                variant="gradient"
-                size="xl"
-                className="group max-sm:w-full max-sm:mx-20"
-                onClick={() =>
-                  document
-                    .getElementById("theory")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
-                Explore the Science
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-              <Button
-                variant="outline"
-                size="xl"
-                className="max-sm:w-full max-sm:mx-20"
-                onClick={() =>
-                  document
-                    .getElementById("concept")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
-                See the Solution
-              </Button>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Button
+                  variant="gradient"
+                  size="xl"
+                  className="group max-sm:w-[80dvw] max-sm:mx-20"
+                  onClick={() =>
+                    document
+                      .getElementById("prototype")
+                      ?.scrollIntoView({ behavior: "smooth" })
+                  }
+                >
+                  Try the Prototype
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="xl"
+                  className="max-sm:w-[80dvw] max-sm:mx-20"
+                  onClick={() =>
+                    document
+                      .getElementById("theory")
+                      ?.scrollIntoView({ behavior: "smooth" })
+                  }
+                >
+                  Learn the Science
+                </Button>
+              </div>
             </motion.div>
           </motion.div>
         </div>
+      </section>
+
+      {/* App Prototype Section */}
+      <section id="prototype" className="py-24 md:py-32 bg-muted/30">
+        <AppPrototype />
       </section>
 
       {/* Theory Section */}
@@ -864,8 +872,7 @@ export default function Home() {
               Beyond Technology
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              AI-powered safety tools are most effective within broader
-              ecosystems addressing root causes and environmental factors.
+              Though technology is useful in tackling violence against women and girls, there are various other factors that need to be considered in order to create a holistic approach to safety.
             </p>
           </motion.div>
 
