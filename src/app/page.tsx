@@ -19,6 +19,9 @@ import {
   Target,
   Heart,
   Code,
+  Clock,
+  MapPin,
+  UserCheck,
 } from "lucide-react";
 
 import Navigation from "@/components/Navigation";
@@ -519,6 +522,103 @@ export default function Home() {
               </CardContent>
             </Card>
           </motion.div>
+        </div>
+      </section>
+
+      {/* User Profiles Section */}
+      <section id="profiles" className="py-24 md:py-32 bg-muted/30">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center max-w-4xl mx-auto mb-16"
+          >
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-gradient pb-2">
+              Who Benefits
+            </h2>
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              Real stories from women who need innovative safety solutions in their daily lives.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {[
+              {
+                name: "Ayesha Khan",
+                age: 24,
+                image: "/ayesha-khan.png",
+                useCase: "Frequently walks home from university or late shifts; has experienced catcalling and following.",
+                needs: "Discreet app access via smartwatch; AI call provides visible deterrent and records interactions.",
+                useCaseIcon: Clock,
+                needsIcon: Watch,
+              },
+              {
+                name: "Claire Newton",
+                age: 41,
+                image: "/claire-newton.png",
+                useCase: "Works night shifts, commutes via public transport; worries about being targeted due to uniform and timing.",
+                needs: "Easy-to-activate SOS voice command; AI bot reassures and collects evidence if needed.",
+                useCaseIcon: MapPin,
+                needsIcon: Smartphone,
+              },
+              {
+                name: "Ella Macrae",
+                age: 17,
+                image: "/ella-macrae.png",
+                useCase: "Goes out with friends to city centre, but feels unsafe waiting for buses at night.",
+                needs: "Parent-connected alerts; teen-friendly design that doesn't draw attention; quick tap to activate AI call.",
+                useCaseIcon: Users,
+                needsIcon: UserCheck,
+              },
+            ].map((profile, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.2 }}
+              >
+                <Card className="glass-effect hover-lift h-full">
+                  <CardHeader className="text-center">
+                    <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden border-4 border-primary/20">
+                      <img
+                        src={profile.image}
+                        alt={profile.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <CardTitle className="text-2xl">
+                      <span className="font-bold">{profile.name}</span>
+                      <span className="text-muted-foreground font-normal"> ({profile.age})</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-3">
+                        <profile.useCaseIcon className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                        <div>
+                          <h4 className="font-semibold text-sm text-primary mb-1">Use Case</h4>
+                          <p className="text-sm text-muted-foreground leading-relaxed">
+                            {profile.useCase}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <profile.needsIcon className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                        <div>
+                          <h4 className="font-semibold text-sm text-primary mb-1">Needs</h4>
+                          <p className="text-sm text-muted-foreground leading-relaxed">
+                            {profile.needs}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
