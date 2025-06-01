@@ -347,7 +347,7 @@ export default function Home() {
                           opacity: isExpanded ? 1 : 0,
                         }}
                         transition={{
-                          duration: 0.4,
+                          duration: 0.3,
                           ease: [0.4, 0.0, 0.2, 1],
                         }}
                         className="overflow-hidden"
@@ -368,7 +368,7 @@ export default function Home() {
                                 }}
                                 transition={{
                                   delay: isExpanded ? idx * 0.1 + 0.2 : 0,
-                                  duration: 0.3,
+                                  duration: 0.2,
                                 }}
                               >
                                 <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
@@ -384,7 +384,7 @@ export default function Home() {
                       <div className="flex justify-center mt-4">
                         <motion.div
                           animate={{ rotate: isExpanded ? 180 : 0 }}
-                          transition={{ duration: 0.3 }}
+                          transition={{ duration: 0.2 }}
                           className="text-primary"
                         >
                           <ArrowRight className="h-5 w-5 rotate-90" />
@@ -535,15 +535,27 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <Tabs defaultValue="features" className="max-w-6xl mx-auto max-sm:mb-30">
+          <Tabs
+            defaultValue="features"
+            className="max-w-6xl mx-auto max-sm:mb-30"
+          >
             <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-0 mb-12 max-sm:mb-[130px]">
-              <TabsTrigger value="features" className="text-sm sm:text-base py-2 sm:py-3">
+              <TabsTrigger
+                value="features"
+                className="text-sm sm:text-base py-2 sm:py-3"
+              >
                 Core Features
               </TabsTrigger>
-              <TabsTrigger value="design" className="text-sm sm:text-base py-2 sm:py-3">
+              <TabsTrigger
+                value="design"
+                className="text-sm sm:text-base py-2 sm:py-3"
+              >
                 Design Principles
               </TabsTrigger>
-              <TabsTrigger value="ethics" className="text-sm sm:text-base py-2 sm:py-3">
+              <TabsTrigger
+                value="ethics"
+                className="text-sm sm:text-base py-2 sm:py-3"
+              >
                 Ethical Framework
               </TabsTrigger>
             </TabsList>
@@ -774,7 +786,7 @@ export default function Home() {
                           opacity: isExpanded ? 1 : 0,
                         }}
                         transition={{
-                          duration: 0.4,
+                          duration: 0.3,
                           ease: [0.4, 0.0, 0.2, 1],
                         }}
                         className="overflow-hidden"
@@ -789,7 +801,7 @@ export default function Home() {
                               }}
                               transition={{
                                 delay: isExpanded ? 0.2 : 0,
-                                duration: 0.3,
+                                duration: 0.2,
                               }}
                             >
                               <h4 className="font-semibold text-green-600 mb-2">
@@ -807,7 +819,7 @@ export default function Home() {
                               }}
                               transition={{
                                 delay: isExpanded ? 0.3 : 0,
-                                duration: 0.3,
+                                duration: 0.2,
                               }}
                             >
                               <h4 className="font-semibold text-destructive mb-2">
@@ -824,7 +836,7 @@ export default function Home() {
                       <div className="flex justify-center pb-4">
                         <motion.div
                           animate={{ rotate: isExpanded ? 180 : 0 }}
-                          transition={{ duration: 0.3 }}
+                          transition={{ duration: 0.2 }}
                           className="text-primary"
                         >
                           <ArrowRight className="h-4 w-4 rotate-90" />
