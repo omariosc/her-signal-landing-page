@@ -20,6 +20,22 @@ export const metadata: Metadata = {
   creator: "HerSignal",
   publisher: "HerSignal",
   robots: "index, follow",
+  icons: [
+    {
+      rel: "icon",
+      url: "/logo-light.png",
+      media: "(prefers-color-scheme: light)",
+    },
+    {
+      rel: "icon", 
+      url: "/logo-dark.png",
+      media: "(prefers-color-scheme: dark)",
+    },
+    {
+      rel: "icon",
+      url: "/favicon.ico",
+    },
+  ],
   openGraph: {
     title: "HerSignal - AI-Powered Safety App for Women",
     description: "Stay safe with HerSignal's AI emergency simulation. Instantly generate realistic phone calls to help you escape dangerous situations.",

@@ -88,7 +88,7 @@ const prototypeScreens = [
               <span className="text-2xl">👩🏻‍💼</span>
             </div>
             <div className="text-sm opacity-80">
-              "How's your evening walk going?<br/>The weather looks nice tonight."
+              &quot;How&apos;s your evening walk going?<br/>The weather looks nice tonight.&quot;
             </div>
           </div>
         </div>
@@ -164,7 +164,7 @@ const prototypeScreens = [
         
         <div className="flex-1 space-y-4">
           <button className="w-full bg-green-600/20 border border-green-600/50 rounded-lg p-4 text-left">
-            <div className="font-medium text-green-400">I'm okay</div>
+            <div className="font-medium text-green-400">I&apos;m okay</div>
             <div className="text-xs opacity-60">End call and delete recordings</div>
           </button>
           
@@ -219,7 +219,7 @@ const prototypeScreens = [
         </div>
         
         <div className="text-xs text-center text-gray-500 mt-auto">
-          Your safety session is complete. You're in control.
+          Your safety session is complete. You&apos;re in control.
         </div>
       </div>
     )

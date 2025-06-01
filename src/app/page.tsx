@@ -36,7 +36,6 @@ import {
   GlobalPrevalenceChart,
 } from "@/components/ChartComponents";
 import AppPrototype from "@/components/AppPrototype";
-import DownloadButtons from "@/components/DownloadButtons";
 
 const regionalData = {
   UK: {
