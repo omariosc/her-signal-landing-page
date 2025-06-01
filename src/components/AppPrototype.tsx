@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from './ui/button'
 import { Card } from './ui/card'
 import DownloadButtons from './DownloadButtons'
@@ -228,13 +228,29 @@ const prototypeScreens = [
 
 export default function AppPrototype() {
   const [currentScreen, setCurrentScreen] = useState(0)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [direction, setDirection] = useState<'left' | 'right' | null>(null)
 
   const nextScreen = () => {
+    if (isTransitioning) return
+    setDirection('right')
+    setIsTransitioning(true)
     setCurrentScreen((prev) => (prev + 1) % prototypeScreens.length)
+    setTimeout(() => {
+      setIsTransitioning(false)
+      setDirection(null)
+    }, 400)
   }
 
   const prevScreen = () => {
+    if (isTransitioning) return
+    setDirection('left')
+    setIsTransitioning(true)
     setCurrentScreen((prev) => (prev - 1 + prototypeScreens.length) % prototypeScreens.length)
+    setTimeout(() => {
+      setIsTransitioning(false)
+      setDirection(null)
+    }, 400)
   }
 
   const getPrevIndex = () => (currentScreen - 1 + prototypeScreens.length) % prototypeScreens.length
@@ -249,37 +265,58 @@ export default function AppPrototype() {
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-20 items-start">
+      <div className="grid md:grid-cols-2 gap-14 md:gap-24 items-start">
         {/* Phone mockup carousel */}
         <div className="flex flex-col items-center">
-          <div className="relative w-80 h-[600px] mb-6">
-            {/* Previous screen (left, behind) */}
-            <div className="absolute left-[-60px] top-6 w-72 h-full bg-black rounded-[2.8rem] p-3 shadow-xl opacity-30 scale-90 z-10 transform rotate-[-8deg]">
-              <div className="w-full h-full bg-white dark:bg-gray-900 rounded-[2.3rem] overflow-hidden">
-                {prototypeScreens[getPrevIndex()].screen}
-              </div>
-            </div>
-            
-            {/* Next screen (right, behind) */}
-            <div className="absolute right-[-60px] top-6 w-72 h-full bg-black rounded-[2.8rem] p-3 shadow-xl opacity-30 scale-90 z-10 transform rotate-[8deg]">
-              <div className="w-full h-full bg-white dark:bg-gray-900 rounded-[2.3rem] overflow-hidden">
-                {prototypeScreens[getNextIndex()].screen}
-              </div>
-            </div>
-            
-            {/* Current screen (center, main) */}
-            <div className="absolute inset-0 w-80 h-full bg-black rounded-[3rem] p-4 shadow-2xl z-20">
-              <div className="w-full h-full bg-white dark:bg-gray-900 rounded-[2.5rem] overflow-hidden">
-                {prototypeScreens[currentScreen].screen}
-              </div>
-            </div>
+          <div className="relative w-80 h-[600px] mb-6 overflow-visible">
+            {/* All screens - positions and opacity change simultaneously */}
+            {prototypeScreens.map((screen, index) => {
+              const isCurrentScreen = index === currentScreen
+              const isPrevScreen = index === getPrevIndex()
+              const isNextScreen = index === getNextIndex()
+              
+              // Don't render screens that aren't visible
+              if (!isCurrentScreen && !isPrevScreen && !isNextScreen) return null
+              
+              let position = ''
+              let opacity = ''
+              let zIndex = ''
+              
+              if (isCurrentScreen) {
+                // Current screen - center position, always 1.0 opacity
+                position = 'left-0'
+                opacity = 'opacity-100'
+                zIndex = 'z-20'
+              } else if (isPrevScreen) {
+                // Previous screen - left position, always 0.5 opacity
+                position = 'left-[-80px]'
+                opacity = 'opacity-50'
+                zIndex = 'z-10'
+              } else if (isNextScreen) {
+                // Next screen - right position, always 0.5 opacity
+                position = 'left-[80px]'
+                opacity = 'opacity-50'
+                zIndex = 'z-10'
+              }
+              
+              return (
+                <div 
+                  key={index}
+                  className={`absolute w-80 h-[600px] bg-black rounded-[3rem] p-4 shadow-xl ${isTransitioning ? 'transition-none' : 'transition-opacity duration-200 ease-in-out'} ${position} ${opacity} ${zIndex}`}
+                >
+                  <div className="w-full h-full bg-white dark:bg-gray-900 rounded-[2.5rem] overflow-hidden">
+                    {screen.screen}
+                  </div>
+                </div>
+              )
+            })}
           </div>
           
           {/* Navigation arrows underneath */}
           <div className="flex items-center justify-center gap-4">
             <button 
               onClick={prevScreen}
-              className="w-9 h-9 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform text-gray-700 dark:text-gray-300"
+              className="w-9 h-9 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform text-gray-700 dark:text-gray-300 !cursor-pointer"
             >
               ←
             </button>
@@ -288,7 +325,7 @@ export default function AppPrototype() {
             </span>
             <button 
               onClick={nextScreen}
-              className="w-9 h-9 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform text-gray-700 dark:text-gray-300"
+              className="w-9 h-9 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform text-gray-700 dark:text-gray-300 !cursor-pointer"
             >
               →
             </button>
@@ -296,7 +333,7 @@ export default function AppPrototype() {
         </div>
 
         {/* Controls and info */}
-        <div className="space-y-6">
+        <div className="space-y-[21px] -mt-6">
           {/* Mobile navigation buttons - shown above screen on small screens */}
           <div className="block md:hidden mb-6">
             <div className="flex flex-wrap gap-2 justify-center">
