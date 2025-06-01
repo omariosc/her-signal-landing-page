@@ -1000,6 +1000,9 @@ export default function Home() {
               Data from UN Women, WHO, national statistics offices, and academic
               research • Built for innovators and changemakers
             </p>
+            <p className="text-xs text-muted-foreground mt-2">
+              Contact: support@hersignal.org
+            </p>
           </motion.div>
         </div>
       </footer>

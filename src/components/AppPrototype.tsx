@@ -229,6 +229,17 @@ const prototypeScreens = [
 export default function AppPrototype() {
   const [currentScreen, setCurrentScreen] = useState(0)
 
+  const nextScreen = () => {
+    setCurrentScreen((prev) => (prev + 1) % prototypeScreens.length)
+  }
+
+  const prevScreen = () => {
+    setCurrentScreen((prev) => (prev - 1 + prototypeScreens.length) % prototypeScreens.length)
+  }
+
+  const getPrevIndex = () => (currentScreen - 1 + prototypeScreens.length) % prototypeScreens.length
+  const getNextIndex = () => (currentScreen + 1) % prototypeScreens.length
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="text-center mb-8">
@@ -238,20 +249,71 @@ export default function AppPrototype() {
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8 items-start">
-        {/* Phone mockup */}
-        <div className="flex justify-center">
-          <div className="relative">
-            <div className="w-80 h-[640px] bg-black rounded-[3rem] p-4 shadow-2xl">
+      <div className="grid md:grid-cols-2 gap-20 items-start">
+        {/* Phone mockup carousel */}
+        <div className="flex flex-col items-center">
+          <div className="relative w-80 h-[600px] mb-6">
+            {/* Previous screen (left, behind) */}
+            <div className="absolute left-[-60px] top-6 w-72 h-full bg-black rounded-[2.8rem] p-3 shadow-xl opacity-30 scale-90 z-10 transform rotate-[-8deg]">
+              <div className="w-full h-full bg-white dark:bg-gray-900 rounded-[2.3rem] overflow-hidden">
+                {prototypeScreens[getPrevIndex()].screen}
+              </div>
+            </div>
+            
+            {/* Next screen (right, behind) */}
+            <div className="absolute right-[-60px] top-6 w-72 h-full bg-black rounded-[2.8rem] p-3 shadow-xl opacity-30 scale-90 z-10 transform rotate-[8deg]">
+              <div className="w-full h-full bg-white dark:bg-gray-900 rounded-[2.3rem] overflow-hidden">
+                {prototypeScreens[getNextIndex()].screen}
+              </div>
+            </div>
+            
+            {/* Current screen (center, main) */}
+            <div className="absolute inset-0 w-80 h-full bg-black rounded-[3rem] p-4 shadow-2xl z-20">
               <div className="w-full h-full bg-white dark:bg-gray-900 rounded-[2.5rem] overflow-hidden">
                 {prototypeScreens[currentScreen].screen}
               </div>
             </div>
           </div>
+          
+          {/* Navigation arrows underneath */}
+          <div className="flex items-center justify-center gap-4">
+            <button 
+              onClick={prevScreen}
+              className="w-9 h-9 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform text-gray-700 dark:text-gray-300"
+            >
+              ←
+            </button>
+            <span className="text-sm text-gray-500 dark:text-gray-400 px-4">
+              {currentScreen + 1} of {prototypeScreens.length}
+            </span>
+            <button 
+              onClick={nextScreen}
+              className="w-9 h-9 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform text-gray-700 dark:text-gray-300"
+            >
+              →
+            </button>
+          </div>
         </div>
 
         {/* Controls and info */}
         <div className="space-y-6">
+          {/* Mobile navigation buttons - shown above screen on small screens */}
+          <div className="block md:hidden mb-6">
+            <div className="flex flex-wrap gap-2 justify-center">
+              {prototypeScreens.map((_, index) => (
+                <Button
+                  key={index}
+                  variant={currentScreen === index ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setCurrentScreen(index)}
+                  className="w-8 h-8 p-0"
+                >
+                  {index + 1}
+                </Button>
+              ))}
+            </div>
+          </div>
+          
           <Card className="p-6">
             <h3 className="text-xl font-semibold mb-2">
               {prototypeScreens[currentScreen].title}
@@ -260,7 +322,8 @@ export default function AppPrototype() {
               {prototypeScreens[currentScreen].description}
             </p>
             
-            <div className="flex flex-wrap gap-2">
+            {/* Desktop navigation buttons */}
+            <div className="hidden md:flex flex-wrap gap-2">
               {prototypeScreens.map((_, index) => (
                 <Button
                   key={index}
