@@ -89,24 +89,22 @@ const theoryCards = [
       "Phone calls create a 'social shield' and sense of remote companionship, reducing vulnerability without direct confrontation.",
     details: [
       "Creates perceived social connection",
-      "Provides plausible deniability",
-      "Reduces cognitive 'safety work' burden",
+      "Discrete and accessible",
       "Offers non-aggressive deterrent option",
     ],
   },
-  {
-    icon: Brain,
-    title: "Perpetrator's Calculus",
-    subtitle: "Rational Choice Theory",
-    description:
-      "Increases perceived risk and effort for potential offenders, disrupting their target selection process.",
-    details: [
-      "Increases cost-benefit analysis hesitation",
-      "Signals potential surveillance/witnesses",
-      "Disrupts victim isolation assessment",
-      "Creates uncertainty about consequences",
-    ],
-  },
+  // {
+  //   icon: Brain,
+  //   title: "Perpetrator's Calculus",
+  //   subtitle: "Rational Choice Theory",
+  //   description:
+  //     "Increases perceived risk and effort for potential offenders, disrupting their target selection process.",
+  //   details: [,
+  //     "Signals potential surveillance/witnesses",
+  //     "Reduced perception of isolation",
+  //     "Creates uncertainty about consequences",
+  //   ],
+  // },
   {
     icon: Eye,
     title: "Remote Guardian",
@@ -147,7 +145,7 @@ const techSolutions = [
   {
     icon: Lightbulb,
     title: "Environmental Tech",
-    examples: "Smart lighting, AI-CCTV",
+    examples: "Smart lighting, CCTV, AI Detection",
     pros: "Proven crime reduction, real-time threat detection",
     cons: "Privacy concerns, algorithmic bias, high costs",
   },
@@ -315,7 +313,7 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {theoryCards.map((card, index) => {
               const isExpanded = expandedCard === index;
               return (
@@ -576,14 +574,14 @@ export default function Home() {
                     desc: "Advanced text-to-speech generating natural, convincing conversation with varied personas and tones.",
                   },
                   {
+                    icon: Shield,
+                    title: "Familiar Voice",
+                    desc: "Your loved one can record their voice, allowing the model to imitate them, creating a sense of familiarity.",
+                  },
+                  {
                     icon: Zap,
                     title: "Instant Activation",
                     desc: "Discreet, one-tap activation avoiding conspicuous actions that could alert potential aggressors.",
-                  },
-                  {
-                    icon: Shield,
-                    title: "Strategic Scripts",
-                    desc: "AI dialogue designed to imply guardianship or imminent arrival, maximizing deterrent effect.",
                   },
                   {
                     icon: AlertTriangle,
@@ -637,7 +635,13 @@ export default function Home() {
                   {
                     icon: Users,
                     title: "Co-Design Approach",
-                    desc: "Developed *with* diverse women, not *for* them. Lived experiences inform every design decision.",
+                    desc: (
+                      <>
+                        Developed <strong>with</strong> diverse women, not{" "}
+                        <strong>for</strong> them. Lived experiences inform every design
+                        decision.
+                      </>
+                    ),
                   },
                   {
                     icon: Heart,

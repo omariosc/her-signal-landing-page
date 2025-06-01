@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Menu, X } from 'lucide-react';
+import { Shield, Menu, X, ChevronDown, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -10,6 +10,7 @@ const Navigation = () => {
   const [activeSection, setActiveSection] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [resourcesDropdownOpen, setResourcesDropdownOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,6 +42,19 @@ const Navigation = () => {
     { href: '#concept', label: 'Concept' },
     { href: '#context', label: 'Context' },
     { href: '#challenge', label: 'Challenge' },
+  ];
+
+  const resourceItems = [
+    {
+      label: '24-hour National Domestic Abuse Helpline',
+      href: 'https://www.nationaldahelpline.org.uk/',
+      description: 'Free, confidential helpline for women and men experiencing domestic abuse'
+    },
+    {
+      label: 'End Violence Against Women - Find Help',
+      href: 'https://www.endviolenceagainstwomen.org.uk/find-help/',
+      description: 'Resources and support for those experiencing violence'
+    }
   ];
 
   const handleNavClick = (href: string) => {
@@ -101,6 +115,61 @@ const Navigation = () => {
                 )}
               </motion.button>
             ))}
+            
+            {/* Resources Dropdown */}
+            <div className="relative">
+              <motion.button
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * navItems.length }}
+                onClick={() => setResourcesDropdownOpen(!resourcesDropdownOpen)}
+                onMouseEnter={() => setResourcesDropdownOpen(true)}
+                onMouseLeave={() => setResourcesDropdownOpen(false)}
+                className="flex items-center text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
+              >
+                Resources
+                <ChevronDown className={cn(
+                  "ml-1 h-4 w-4 transition-transform",
+                  resourcesDropdownOpen && "rotate-180"
+                )} />
+              </motion.button>
+              
+              {resourcesDropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  onMouseEnter={() => setResourcesDropdownOpen(true)}
+                  onMouseLeave={() => setResourcesDropdownOpen(false)}
+                  className="absolute top-full right-0 mt-2 w-80 glass-effect rounded-lg shadow-lg border p-2 z-50"
+                >
+                  {resourceItems.map((resource, index) => (
+                    <motion.a
+                      key={resource.href}
+                      href={resource.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="block p-3 rounded-md hover:bg-accent transition-colors group"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h4 className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                            {resource.label}
+                          </h4>
+                          <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                            {resource.description}
+                          </p>
+                        </div>
+                        <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 ml-2" />
+                      </div>
+                    </motion.a>
+                  ))}
+                </motion.div>
+              )}
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -140,6 +209,25 @@ const Navigation = () => {
                 {item.label}
               </button>
             ))}
+            
+            {/* Resources section for mobile */}
+            <div className="pt-2 mt-2 border-t border-border/50">
+              <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Resources
+              </div>
+              {resourceItems.map((resource) => (
+                <a
+                  key={resource.href}
+                  href={resource.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between w-full px-3 py-2 rounded-md text-sm font-medium transition-colors text-muted-foreground hover:text-primary hover:bg-accent group"
+                >
+                  <span>{resource.label}</span>
+                  <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                </a>
+              ))}
+            </div>
           </motion.div>
         )}
       </nav>
