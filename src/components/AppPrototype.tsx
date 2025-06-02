@@ -331,7 +331,8 @@ export default function AppPrototype() {
                       : "transition-opacity duration-200 ease-in-out"
                   } ${position} ${opacity} ${zIndex} ${
                     !isCurrentScreen ? "hidden md:block" : ""
-                  }`}
+                  } ${!isCurrentScreen ? "cursor-pointer" : ""}`}
+                  onClick={() => !isCurrentScreen && jumpToScreen(index)}
                 >
                   <Image
                     src={getImagePath(index)}

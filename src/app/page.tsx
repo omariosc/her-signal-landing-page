@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import {
   Shield,
@@ -25,6 +25,10 @@ import {
   Ban,
   HeartCrack,
   TrendingDown,
+  AlertCircle,
+  Phone,
+  ShieldX,
+  ExternalLink,
 } from "lucide-react";
 
 import Navigation from "@/components/Navigation";
@@ -38,8 +42,6 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  RegionalDataChart,
-  GlobalPrevalenceChart,
   SafetyPrecautionsChart,
 } from "@/components/ChartComponents";
 import AppPrototype from "@/components/AppPrototype";
@@ -49,57 +51,34 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import Image from "next/image";
 
-const regionalData = {
-  UK: {
-    labels: [
-      "Harassment in Public (16-34 y/o)",
-      "Felt Followed (16-34 y/o)",
-      "Sexual Assault Since Age 16",
-      "Stalking (Last Year)",
-    ],
-    data: [67, 29, 25, 3.1],
-    source: "ONS, YouGov",
-  },
-  USA: {
-    labels: [
-      "Harassment in Public Spaces",
-      "First Harassment before Age 18",
-      "First Harassment before Age 13",
-      "Violent Victimization by Stranger (per 1k)",
-    ],
-    data: [73, 56, 20, 11.4],
-    source: "Stop Street Harassment, NCVS",
-  },
-  Europe: {
-    labels: [
-      "Physical/Sexual Violence by Non-Partner",
-      "Sexual Violence by Non-Partner",
-      "Stalking by Non-Partner",
-      "Cyber Harassment Since Age 15",
-    ],
-    data: [20, 13, 14, 10],
-    source: "EU-GBV Survey",
-  },
-  "Global South": {
-    labels: [
-      "Feel Unsafe in Public (Delhi)",
-      "Harassment on Public Transport (Brazil)",
-      "Experienced Sexual Harassment (Egypt)",
-    ],
-    data: [95, 97, 99.3],
-    source: "UN Women, ActionAid",
-  },
-};
 
 const theoryCards = [
+  {
+    icon: Eye,
+    title: "Remote Guardian",
+    subtitle: "Capable Guardianship",
+    description:
+      'The call simulates the presence of a "remote bystander" or "capable guardian" who is aware of the situation, disrupting the harasser\'s confidence that their actions are unobserved.',
+    details: [
+      "Capable Guardianship (Routine Activities Theory): The person on the other end of the call is perceived as a guardian who could be alerted, call for help, or witness the event, increasing the risk of apprehension.",
+      "Reduces Anonymity: The core fear for many perpetrators is being caught. A phone call suggests their actions are not anonymous and could have immediate consequences.",
+      "Psychological Impact: The simple belief that 'someone is listening' can be enough to make a perpetrator reconsider their actions, breaking the sense of power and control they feel over an isolated victim.",
+    ],
+  },
   {
     icon: Users,
     title: "The User's Shield",
     subtitle: "Non-Confrontational Strategy",
     description:
-      'For the user, a phone call is a non-confrontational way to signal non-isolation, creating a "social shield" that reduces feelings of vulnerability. \n Women widely adopt phone calls as a safety tactic because it\'s a low-stakes, non-confrontational way to alter a threatening situation. Instead of directly challenging a potential harasser (or even holding keys between knuckles), which risks escalation, a phone call introduces a perceived third party.',
+      "Women widely adopt phone calls as a safety tactic because it's a low-stakes, non-confrontational way to alter a threatening situation. Instead of directly challenging a potential harasser (or even holding keys between knuckles), which risks escalation, a phone call introduces a perceived third party.",
     details: [
       'Creates a "Social Shield": The act of being in a conversation makes the user appear occupied and socially connected, deterring unwanted approaches.',
       'Invited Space: It creates a sense of "invited space" or remote companionship, which can alleviate feelings of isolation and vulnerability.',
@@ -117,19 +96,7 @@ const theoryCards = [
       "Situational Action Theory (SAT): The call alters the immediate setting by introducing a deterrent threat (the remote listener), which can trigger deliberation in the offender and lead them to see crime as a less viable option.",
       "Disrupts Target Selection: Perpetrators often seek isolated or vulnerable individuals. A phone call signals connection and awareness, disrupting this selection script.",
     ],
-  },
-  {
-    icon: Eye,
-    title: "Remote Guardian",
-    subtitle: "Capable Guardianship",
-    description:
-      'The call simulates the presence of a "remote bystander" or "capable guardian" who is aware of the situation, disrupting the harasser\'s confidence that their actions are unobserved.',
-    details: [
-      "Capable Guardianship (Routine Activities Theory): The person on the other end of the call is perceived as a guardian who could be alerted, call for help, or witness the event, increasing the risk of apprehension.",
-      "Reduces Anonymity: The core fear for many perpetrators is being caught. A phone call suggests their actions are not anonymous and could have immediate consequences.",
-      "Psychological Impact: The simple belief that 'someone is listening' can be enough to make a perpetrator reconsider their actions, breaking the sense of power and control they feel over an isolated victim.",
-    ],
-  },
+  }
 ];
 
 const techSolutions = [
@@ -163,54 +130,8 @@ const techSolutions = [
   },
 ];
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const innovationPrinciples = [
-  {
-    number: "01",
-    title: "Survivor-Centric Design",
-    description:
-      "Co-design with diverse women, prioritizing their needs and agency over technical sophistication.",
-    icon: Heart,
-  },
-  {
-    number: "02",
-    title: "Prevention Focus",
-    description:
-      "Move beyond reactive alerts to proactive violence prevention and community empowerment.",
-    icon: Shield,
-  },
-  {
-    number: "03",
-    title: "Address Root Causes",
-    description:
-      "Challenge harmful norms and perpetrator behavior, not just protect potential victims.",
-    icon: Target,
-  },
-  {
-    number: "04",
-    title: "Ethics-First Development",
-    description:
-      "Embed privacy, security, and bias mitigation from day one of development.",
-    icon: CheckCircle,
-  },
-  {
-    number: "05",
-    title: "Ecosystem Integration",
-    description:
-      "Connect with existing services and infrastructure rather than creating isolated solutions.",
-    icon: Zap,
-  },
-  {
-    number: "06",
-    title: "Reduce Safety Burden",
-    description:
-      "Alleviate rather than increase the cognitive and emotional labor women perform to stay safe.",
-    icon: Brain,
-  },
-];
-
 export default function Home() {
-  const [selectedRegion, setSelectedRegion] = useState("UK");
+  const [selectedTheoryCard, setSelectedTheoryCard] = useState<number | null>(null);
 
   return (
     <div className="min-h-screen bg-gradient-mesh">
@@ -452,7 +373,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.2, delay: 0 }}
             >
               <Card className="glass-effect hover-lift h-full text-center">
                 <CardHeader>
@@ -475,14 +396,14 @@ export default function Home() {
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.2, delay: 0 }}
             >
               <Card className="glass-effect hover-lift h-full text-center">
                 <CardHeader>
-                  <div className="mx-auto mb-4 p-3 rounded-full bg-destructive/10">
-                    <HeartCrack className="h-12 w-12 text-destructive" />
+                  <div className="mx-auto mb-4 p-3 rounded-full bg-pink-500/10">
+                    <HeartCrack className="h-12 w-12 text-pink-500" />
                   </div>
-                  <CardTitle className="text-xl text-destructive">
+                  <CardTitle className="text-xl text-pink-500">
                     The Mental Health Toll
                   </CardTitle>
                 </CardHeader>
@@ -498,7 +419,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.2, delay: 0 }}
             >
               <Card className="glass-effect hover-lift h-full text-center">
                 <CardHeader>
@@ -518,7 +439,78 @@ export default function Home() {
             </motion.div>
           </div>
 
-          <motion.div
+          <div className="grid md:grid-cols-3 gap-8 mb-16 max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.2, delay: 0 }}
+            >
+              <Card className="glass-effect hover-lift h-full text-center">
+                <CardHeader>
+                  <div className="mx-auto mb-4 p-3 rounded-full bg-orange-500/10">
+                    <AlertCircle className="h-12 w-12 text-orange-500" />
+                  </div>
+                  <CardTitle className="text-xl text-orange-500">
+                    Underreporting Crisis
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Less than <strong className="font-semibold">10% of violence against women</strong> is reported to authorities, creating a massive gap in safety response.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.2, delay: 0 }}
+            >
+              <Card className="glass-effect hover-lift h-full text-center">
+                <CardHeader>
+                  <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10">
+                    <ShieldX className="h-12 w-12 text-primary" />
+                  </div>
+                  <CardTitle className="text-xl text-primary">
+                    The Safety Work Burden
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Women perform constant cognitive labor such as route planning, attire choices, and vigilance - an invisible tax on freedom.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.2, delay: 0 }}
+            >
+              <Card className="glass-effect hover-lift h-full text-center">
+                <CardHeader>
+                  <div className="mx-auto mb-4 p-3 rounded-full bg-accent/20">
+                    <Phone className="h-12 w-12 text-accent-foreground" />
+                  </div>
+                  <CardTitle className="text-xl">
+                    Mobile Safety Strategy
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground leading-relaxed">
+                    <strong className="font-semibold">68-94% of women in developing countries</strong> report feeling safer with mobile phones, using them for deterrence.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+
+          {/* <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -533,7 +525,7 @@ export default function Home() {
                 <SafetyPrecautionsChart />
               </CardContent>
             </Card>
-          </motion.div>
+          </motion.div> */}
         </div>
       </section>
 
@@ -570,7 +562,13 @@ export default function Home() {
                   transition={{ duration: 0.3 }}
                   layout
                 >
-                  <Card className="cursor-pointer hover-lift glass-effect group overflow-hidden">
+                  <Card 
+                    className="cursor-pointer hover-lift glass-effect group overflow-hidden relative"
+                    onClick={() => setSelectedTheoryCard(index)}
+                  >
+                    <div className="absolute top-4 right-4 z-10">
+                      <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                    </div>
                     <CardHeader className="text-center pb-4">
                       <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
                         <card.icon className="h-8 w-8 text-primary" />
@@ -586,46 +584,6 @@ export default function Home() {
                       <p className="text-muted-foreground leading-relaxed mb-4">
                         {card.description}
                       </p>
-
-                      <motion.div
-                        initial={false}
-                        animate={{
-                          height: "auto",
-                          opacity: 1,
-                        }}
-                        transition={{
-                          duration: 0.3,
-                          ease: [0.4, 0.0, 0.2, 1],
-                        }}
-                        className="overflow-hidden"
-                      >
-                        <div className="border-t border-border/50 pt-4 mt-4">
-                          <h4 className="font-semibold text-lg mb-3 text-primary">
-                            Key Mechanisms:
-                          </h4>
-                          <ul className="space-y-3">
-                            {card.details.map((detail, idx) => (
-                              <motion.li
-                                key={idx}
-                                className="flex items-start gap-2"
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{
-                                  opacity: 1,
-                                  x: 0,
-                                }}
-                                transition={{
-                                  duration: 0.2,
-                                }}
-                              >
-                                <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                                <span className="text-muted-foreground leading-relaxed">
-                                  {detail}
-                                </span>
-                              </motion.li>
-                            ))}
-                          </ul>
-                        </div>
-                      </motion.div>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -635,127 +593,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Evidence Section */}
-      <section
-        id="evidence"
-        className="py-24 md:py-32 bg-muted/30 max-[350px]:hidden max-h-[350px]:hidden"
-      >
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center max-w-4xl mx-auto mb-16"
-          >
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-gradient pb-2">
-              The Data Tells the Story
-            </h2>
-            <p className="text-xl text-muted-foreground leading-relaxed">
-              Global statistics reveal the urgent need for innovative safety
-              solutions in public spaces.
-            </p>
-          </motion.div>
-
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 mb-16 mx-auto overflow-auto">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="space-y-6"
-            >
-              <Card className="glass-effect">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <BarChart3 className="h-5 w-5 text-primary" />
-                    Global Reality Check
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="p-4 bg-destructive/10 rounded-lg border border-destructive/20">
-                      <h4 className="font-semibold text-destructive mb-2">
-                        Underreporting Crisis
-                      </h4>
-                      <p className="text-sm text-muted-foreground">
-                        Less than 10% of violence against women is reported to
-                        authorities, creating a massive gap in safety response.
-                      </p>
-                    </div>
-                    <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
-                      <h4 className="font-semibold text-primary mb-2">
-                        The Safety Work Burden
-                      </h4>
-                      <p className="text-sm text-muted-foreground">
-                        Women perform constant cognitive labor such as route
-                        planning, attire choices, and vigilance - an invisible
-                        tax on freedom.
-                      </p>
-                    </div>
-                    <div className="p-4 bg-accent rounded-lg border">
-                      <h4 className="font-semibold mb-2">
-                        Mobile Safety Strategy
-                      </h4>
-                      <p className="text-sm text-muted-foreground">
-                        68-94% of women in developing countries report feeling
-                        safer with mobile phones, using them for deterrence.
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <Card className="glass-effect h-full">
-                <CardHeader>
-                  <CardTitle>Global Prevalence</CardTitle>
-                  <CardDescription>
-                    Lifetime non-partner sexual violence (WHO estimates)
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <GlobalPrevalenceChart />
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center max-w-6xl mx-auto"
-          >
-            <h3 className="text-3xl font-bold mb-8">Regional Perspectives</h3>
-            <div className="flex flex-wrap justify-center gap-4 mb-8">
-              {Object.keys(regionalData).map((region) => (
-                <Button
-                  key={region}
-                  variant={selectedRegion === region ? "default" : "outline"}
-                  onClick={() => setSelectedRegion(region)}
-                  className="transition-all duration-300"
-                >
-                  {region}
-                </Button>
-              ))}
-            </div>
-            <Card className="glass-effect">
-              <CardContent className="p-8">
-                <RegionalDataChart
-                  region={selectedRegion}
-                  data={
-                    regionalData[selectedRegion as keyof typeof regionalData]
-                  }
-                />
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
-      </section>
 
       {/* User Profiles Section */}
       <section
@@ -773,7 +610,7 @@ export default function Home() {
               Who Benefits
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              Real stories from women who need innovative safety solutions in
+              Users stories from women who need innovative safety solutions in
               their daily lives.
             </p>
           </motion.div>
@@ -1359,7 +1196,9 @@ export default function Home() {
             className="space-y-4"
           >
             <div className="flex justify-center items-center gap-3 mb-6">
-              <Shield className="h-8 w-8 text-primary" />
+              <div className="relative animate-float">
+                <Shield className="h-8 w-8 text-primary animate-bounce-subtle p-1 animate-pulse-slow rounded-full" />
+              </div>
               <span className="text-2xl font-bold text-gradient">
                 HerSignal
               </span>
@@ -1393,6 +1232,54 @@ export default function Home() {
           </motion.div>
         </div>
       </footer>
+
+      {/* Theory Card Modal */}
+      <Dialog open={selectedTheoryCard !== null} onOpenChange={() => setSelectedTheoryCard(null)}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-3">
+              {selectedTheoryCard !== null && (
+                <>
+                  <div className="p-2 rounded-full bg-primary/10">
+                    {React.createElement(theoryCards[selectedTheoryCard].icon, { 
+                      className: "h-6 w-6 text-primary" 
+                    })}
+                  </div>
+                  <div>
+                    <div className="text-xl font-bold">{theoryCards[selectedTheoryCard]?.title}</div>
+                    <div className="text-sm text-primary font-medium">{theoryCards[selectedTheoryCard]?.subtitle}</div>
+                  </div>
+                </>
+              )}
+            </DialogTitle>
+          </DialogHeader>
+          
+          {selectedTheoryCard !== null && (
+            <div className="space-y-4">
+              <h4 className="font-semibold text-lg text-primary">
+                Key Mechanisms:
+              </h4>
+              <ul className="space-y-3">
+                {theoryCards[selectedTheoryCard].details.map((detail, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                    <span className="text-muted-foreground leading-relaxed">
+                      {detail.includes(':') ? (
+                        <>
+                          <strong>{detail.split(':')[0]}:</strong>
+                          {detail.split(':').slice(1).join(':')}
+                        </>
+                      ) : (
+                        detail
+                      )}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

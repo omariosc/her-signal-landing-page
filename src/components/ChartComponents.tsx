@@ -227,8 +227,12 @@ export function SafetyPrecautionsChart() {
       {
         label: '% of Women Reporting Use',
         data: safetyData.data,
-        backgroundColor: '#8b5cf6',
-        borderColor: '#7c3aed',
+        backgroundColor: safetyData.labels.map(label => 
+          label === 'Pretends to be on Phone Call' ? '#dc2626' : '#8b5cf6'
+        ),
+        borderColor: safetyData.labels.map(label => 
+          label === 'Pretends to be on Phone Call' ? '#b91c1c' : '#7c3aed'
+        ),
         borderWidth: 1,
         borderRadius: 4,
       },
@@ -260,6 +264,10 @@ export function SafetyPrecautionsChart() {
           font: {
             size: 11,
           },
+          color: function(context: any) {
+            const label = safetyData.labels[context.index];
+            return label === 'Pretends to be on Phone Call' ? '#dc2626' : '#374151';
+          },
         },
       },
     },
@@ -282,12 +290,43 @@ export function SafetyPrecautionsChart() {
         usePointStyle: true,
         pointStyle: 'rect',
         callbacks: {
+          title: function (context: TooltipItem<'bar'>[]) {
+            // Get the original label without array formatting/commas
+            const originalLabel = safetyData.labels[context[0].dataIndex];
+            return originalLabel;
+          },
           label: function (context: TooltipItem<'bar'>) {
             return `${context.dataset.label}: ${context.raw}%`;
           },
         },
       },
     },
+    plugins: [
+      {
+        id: 'barLabels',
+        afterDatasetsDraw: (chart: any) => {
+          const ctx = chart.ctx;
+          chart.data.datasets.forEach((dataset: any, datasetIndex: number) => {
+            const meta = chart.getDatasetMeta(datasetIndex);
+            meta.data.forEach((bar: any, index: number) => {
+              const value = dataset.data[index];
+              const label = safetyData.labels[index];
+              const isPhoneCall = label === 'Pretends to be on Phone Call';
+              
+              ctx.fillStyle = isPhoneCall ? '#dc2626' : '#374151';
+              ctx.font = 'bold 12px Inter, sans-serif';
+              ctx.textAlign = 'left';
+              ctx.textBaseline = 'middle';
+              
+              const x = bar.x + 10; // 10px to the right of the bar
+              const y = bar.y;
+              
+              ctx.fillText(`${value}%`, x, y);
+            });
+          });
+        }
+      }
+    ],
   };
 
   return (
