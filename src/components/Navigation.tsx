@@ -2,9 +2,21 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Shield, Menu, X, ChevronDown, ExternalLink, Trophy } from "lucide-react";
+import {
+  Shield,
+  Menu,
+  X,
+  ChevronDown,
+  ExternalLink,
+  Trophy,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 const Navigation = () => {
@@ -99,7 +111,11 @@ const Navigation = () => {
       )}
       role="banner"
     >
-      <nav className="container mx-auto px-6 py-4" role="navigation" aria-label="Main navigation">
+      <nav
+        className="container mx-auto px-6 py-4"
+        role="navigation"
+        aria-label="Main navigation"
+      >
         <div className="flex items-center justify-between">
           <motion.div
             initial={{ opacity: 0 }}
@@ -107,7 +123,7 @@ const Navigation = () => {
             transition={{ delay: 0.2 }}
             className="flex items-center space-x-3"
           >
-            <div className="relative animate-float p-2">
+            <div className="hidden lg:flex relative animate-float p-2">
               <Shield className="h-8 w-8 text-primary p-1 animate-pulse-slow rounded-full" />
             </div>
             <div className="flex items-center gap-2">
@@ -145,7 +161,9 @@ const Navigation = () => {
                         ? "text-primary"
                         : "text-muted-foreground"
                     )}
-                    aria-current={activeSection === item.href.slice(1) ? 'page' : undefined}
+                    aria-current={
+                      activeSection === item.href.slice(1) ? "page" : undefined
+                    }
                     aria-label={`Navigate to ${item.label} section`}
                   >
                     {item.label}
@@ -199,9 +217,7 @@ const Navigation = () => {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * navItems.length }}
-                onClick={() =>
-                  setResourcesDropdownOpen(!resourcesDropdownOpen)
-                }
+                onClick={() => setResourcesDropdownOpen(!resourcesDropdownOpen)}
                 onMouseEnter={() => setResourcesDropdownOpen(true)}
                 className="px-3 py-1.5 bg-primary text-primary-foreground text-sm font-medium rounded-full hover:bg-primary/90 transition-colors flex items-center"
               >
@@ -260,7 +276,11 @@ const Navigation = () => {
               size="icon"
               className="xl:hidden focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-label={
+                mobileMenuOpen
+                  ? "Close navigation menu"
+                  : "Open navigation menu"
+              }
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-menu"
             >
