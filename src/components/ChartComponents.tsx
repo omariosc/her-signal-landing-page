@@ -206,7 +206,7 @@ export function SafetyPrecautionsChart() {
   const formatLabels = (labels: string[]) => {
     return labels.map(label => {
       const words = label.split(' ');
-      let lines = [];
+      const lines = [];
       let currentLine = '';
       
       words.forEach(word => {
@@ -248,6 +248,7 @@ export function SafetyPrecautionsChart() {
         beginAtZero: true,
         max: 100,
         ticks: {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           callback: function(value: any) {
             return value + '%';
           },
@@ -264,6 +265,7 @@ export function SafetyPrecautionsChart() {
           font: {
             size: 11,
           },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           color: function(context: any) {
             const label = safetyData.labels[context.index];
             return label === 'Pretends to be on Phone Call' ? '#dc2626' : '#374151';
@@ -301,32 +303,6 @@ export function SafetyPrecautionsChart() {
         },
       },
     },
-    plugins: [
-      {
-        id: 'barLabels',
-        afterDatasetsDraw: (chart: any) => {
-          const ctx = chart.ctx;
-          chart.data.datasets.forEach((dataset: any, datasetIndex: number) => {
-            const meta = chart.getDatasetMeta(datasetIndex);
-            meta.data.forEach((bar: any, index: number) => {
-              const value = dataset.data[index];
-              const label = safetyData.labels[index];
-              const isPhoneCall = label === 'Pretends to be on Phone Call';
-              
-              ctx.fillStyle = isPhoneCall ? '#dc2626' : '#374151';
-              ctx.font = 'bold 12px Inter, sans-serif';
-              ctx.textAlign = 'left';
-              ctx.textBaseline = 'middle';
-              
-              const x = bar.x + 10; // 10px to the right of the bar
-              const y = bar.y;
-              
-              ctx.fillText(`${value}%`, x, y);
-            });
-          });
-        }
-      }
-    ],
   };
 
   return (

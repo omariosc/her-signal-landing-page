@@ -7,7 +7,6 @@ import {
   Brain,
   Eye,
   Users,
-  BarChart3,
   Smartphone,
   Watch,
   Map,
@@ -41,9 +40,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  SafetyPrecautionsChart,
-} from "@/components/ChartComponents";
 import AppPrototype from "@/components/AppPrototype";
 import {
   Tooltip,
