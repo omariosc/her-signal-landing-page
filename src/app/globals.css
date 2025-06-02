@@ -41,10 +41,19 @@
     animation: glow 2s ease-in-out infinite alternate;
   }
   
+  .animate-pulse-slow {
+    animation: pulse-slow 3s ease-in-out infinite;
+  }
+  
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+  
   .animate-text {
     background-size: 400% 400%;
-    animation: gradient 2.5s ease infinite;
+    animation: gradient 3s ease-in-out infinite;
   }
+  
 }
 
 @keyframes bounce-subtle {
@@ -66,13 +75,31 @@
 }
 
 @keyframes gradient {
-  0% { 
+  0%, 100% { 
     background-position: 0% 50%; 
   }
   50% { 
     background-position: 100% 50%; 
   }
-  100% { 
-    background-position: 0% 50%; 
+}
+
+@keyframes pulse-slow {
+  0%, 100% { 
+    box-shadow: 0 0 10px #8b5cf6, 0 0 15px #8b5cf6, 0 0 20px #8b5cf6;
+    opacity: 0.5;
+  }
+  50% { 
+    box-shadow: 0 0 20px #8b5cf6, 0 0 30px #8b5cf6, 0 0 40px #8b5cf6;
+    opacity: 0.8;
   }
 }
+
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px);
+  }
+  50% { 
+    transform: translateY(-3px);
+  }
+}
+

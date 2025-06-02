@@ -77,10 +77,9 @@ const regionalData = {
     labels: [
       "Feel Unsafe in Public (Delhi)",
       "Harassment on Public Transport (Brazil)",
-      "Experienced VAWG on Public Transport (PNG)",
       "Experienced Sexual Harassment (Egypt)",
     ],
-    data: [95, 97, 90, 99.3],
+    data: [95, 97, 99.3],
     source: "UN Women, ActionAid",
   },
 };
@@ -213,15 +212,82 @@ export default function Home() {
       {/* Hero Section */}
       <section
         id="hero"
-        className="relative min-h-screen flex items-center justify-center overflow-hidden mt-[40px]"
+        className="relative min-h-screen flex items-center justify-center max-[350px]:overflow-visible max-h-[350px]:overflow-visible overflow-hidden pt-24 md:pt-32 max-[350px]:pt-0 max-h-[350px]:pt-0"
       >
         <div className="absolute inset-0 bg-gradient-to-br from-background via-background/50 to-primary/5" />
-        <div className="container relative z-10 mx-auto px-6 text-center">
+        <div className="container relative z-10 mx-auto px-6 text-center max-[350px]:px-4 max-h-[350px]:px-4">
+          {/* Ultra small screens (<= 350px width OR height) - Simplified version */}
+          <div className="max-[350px]:block max-h-[350px]:block hidden">
+            <div className="flex items-center justify-center min-h-screen w-full max-[350px]:p-4 max-h-[350px]:p-4">
+              <div className="w-full max-w-xs mx-auto text-center space-y-6">
+                <span className="text-gradient">HerSignal</span>
+
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.1 }}
+                  className="space-y-4"
+                >
+                  <TooltipProvider>
+                    <div className="text-xs/6 text-gray-600">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="bg-primary text-white px-2 py-1 rounded-full text-xs font-medium ring-2 ring-primary ring-offset-2 ring-offset-background cursor-default">
+                            Won #1
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <span>
+                            Won the most inclusive and accessible prize
+                          </span>
+                        </TooltipContent>
+                      </Tooltip>{" "}
+                      at the{" "}
+                      <a
+                        href="https://www.eventbrite.co.uk/e/tackling-violence-against-women-and-girls-in-public-spaces-hackathon-tickets-1224875137509"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline hover:text-primary transition-colors"
+                      >
+                        &quot;Tackling Violence against Women and Girls in
+                        Public Spaces Hackathon&quot;
+                      </a>
+                    </div>
+                  </TooltipProvider>
+
+                  <div className="flex flex-col gap-2 items-center">
+                    <img
+                      src="/app-store-badge.png"
+                      alt="Download on App Store"
+                      className="h-8 w-auto"
+                    />
+                    <img
+                      src="/google-play-badge.png"
+                      alt="Get it on Google Play"
+                      className="h-8 w-auto"
+                    />
+                  </div>
+
+                  <div className="text-xs text-muted-foreground mt-4 pt-3 border-t border-border/50">
+                    <div>Contact:</div>
+                    <a
+                      href="mailto:support@hersignal.org"
+                      className="bg-primary text-white px-2 py-1 rounded-full hover:underline transition-all duration-200 text-xs inline-block mt-1"
+                    >
+                      support@hersignal.org
+                    </a>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          </div>
+
+          {/* Normal screens (> 350px width AND height) - Full version */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="max-w-5xl mx-auto space-y-8"
+            className="max-w-5xl mx-auto space-y-8 max-[350px]:hidden max-h-[350px]:hidden"
           >
             <motion.div
               initial={{ scale: 0.8 }}
@@ -229,9 +295,8 @@ export default function Home() {
               transition={{ delay: 0.2, type: "spring" }}
               className="flex justify-center mb-8"
             >
-              <div className="relative">
-                <Shield className="h-20 w-20 text-primary animate-bounce-subtle p-2" />
-                <div className="absolute inset-0 bg-primary/20 rounded-full animate-glow" />
+              <div className="relative animate-float">
+                <Shield className="h-20 w-20 text-primary animate-bounce-subtle p-2 animate-pulse-slow rounded-full" />
               </div>
             </motion.div>
 
@@ -241,7 +306,7 @@ export default function Home() {
               transition={{ delay: 0.4 }}
               className="text-5xl md:text-7xl/15 lg:text-8xl font-black leading-tight"
             >
-              <span className="text-gradient animate-text">HerSignal</span>
+              <span className="text-gradient">HerSignal</span>
               <br />
               <span className="text-foreground">AI Safety Companion</span>
             </motion.h1>
@@ -266,9 +331,16 @@ export default function Home() {
               <TooltipProvider>
                 <div className="text-center mb-4">
                   <div className="text-md/6 text-gray-600">
-                    <span className="bg-primary text-white px-2 py-1 rounded-full text-md font-medium mr-1">
-                      Won #1
-                    </span>{" "}
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="bg-primary text-white px-2 py-1 rounded-full text-md font-medium mr-1 ring-2 ring-primary ring-offset-2 ring-offset-background cursor-default">
+                          Won #1
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <span>Won the most inclusive and accessible prize</span>
+                      </TooltipContent>
+                    </Tooltip>{" "}
                     at the{" "}
                     <a
                       href="https://www.eventbrite.co.uk/e/tackling-violence-against-women-and-girls-in-public-spaces-hackathon-tickets-1224875137509"
@@ -337,12 +409,18 @@ export default function Home() {
       </section>
 
       {/* App Prototype Section */}
-      <section id="prototype" className="py-24 md:py-32 bg-muted/30">
+      <section
+        id="prototype"
+        className="py-24 md:py-32 bg-muted/30 max-[350px]:hidden max-h-[350px]:hidden"
+      >
         <AppPrototype />
       </section>
 
       {/* Theory Section */}
-      <section id="theory" className="py-24 md:py-32">
+      <section
+        id="theory"
+        className="py-24 md:py-32 max-[350px]:hidden max-h-[350px]:hidden"
+      >
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -452,7 +530,10 @@ export default function Home() {
       </section>
 
       {/* Evidence Section */}
-      <section id="evidence" className="py-24 md:py-32 bg-muted/30">
+      <section
+        id="evidence"
+        className="py-24 md:py-32 bg-muted/30 max-[350px]:hidden max-h-[350px]:hidden"
+      >
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -570,7 +651,10 @@ export default function Home() {
       </section>
 
       {/* User Profiles Section */}
-      <section id="profiles" className="py-24 md:py-32 bg-muted/30">
+      <section
+        id="profiles"
+        className="py-24 md:py-32 bg-muted/30 max-[350px]:hidden max-h-[350px]:hidden"
+      >
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -683,7 +767,10 @@ export default function Home() {
       </section>
 
       {/* App Concept Section */}
-      <section id="concept" className="py-24 md:py-32">
+      <section
+        id="concept"
+        className="py-24 md:py-32 max-[350px]:hidden max-h-[350px]:hidden"
+      >
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -1023,7 +1110,10 @@ export default function Home() {
       </section>
 
       {/* Context Section */}
-      <section id="context" className="py-24 md:py-32 bg-muted/30">
+      <section
+        id="context"
+        className="py-24 md:py-32 bg-muted/30 max-[350px]:hidden max-h-[350px]:hidden"
+      >
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -1090,7 +1180,10 @@ export default function Home() {
       </section>
 
       {/* Challenge Section */}
-      <section id="challenge" className="py-24 md:py-32">
+      <section
+        id="challenge"
+        className="py-24 md:py-32 max-[350px]:hidden max-h-[350px]:hidden"
+      >
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -1139,7 +1232,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-card border-t py-12">
+      <footer className="bg-card border-t py-12 max-[350px]:hidden max-h-[350px]:hidden">
         <div className="container mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0 }}
@@ -1154,9 +1247,17 @@ export default function Home() {
               </span>
             </div>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Combining research from the &quot;Tackling Violence against Women
-              and Girls in Public Spaces Hackathon&quot; to inform
-              evidence-based innovation.
+              Combining research from the{" "}
+              <a
+                href="https://www.eventbrite.co.uk/e/tackling-violence-against-women-and-girls-in-public-spaces-hackathon-tickets-1224875137509"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-primary transition-colors"
+              >
+                &quot;Tackling Violence against Women and Girls in Public Spaces
+                Hackathon&quot;
+              </a>{" "}
+              to inform evidence-based innovation.
             </p>
             <p className="text-xs text-muted-foreground">
               Data from UN Women, WHO, national statistics offices, and academic

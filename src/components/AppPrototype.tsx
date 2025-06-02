@@ -162,6 +162,8 @@ export default function AppPrototype() {
   const [currentScreen, setCurrentScreen] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [disableTransitions, setDisableTransitions] = useState(false);
+  const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set([0])); // Start with first image loaded
+  const [pendingScreen, setPendingScreen] = useState<number | null>(null);
 
   const getImagePath = (index: number) => {
     return `/${
@@ -186,8 +188,25 @@ export default function AppPrototype() {
   };
 
   const preloadImage = (index: number) => {
+    if (loadedImages.has(index)) return;
+    
     const img = new window.Image();
     img.src = getImagePath(index);
+    img.onload = () => {
+      setLoadedImages(prev => new Set([...prev, index]));
+      // If this was a pending screen change, execute it now
+      if (pendingScreen === index) {
+        setCurrentScreen(index);
+        setPendingScreen(null);
+      }
+    };
+  };
+
+  const preloadAdjacentImages = (index: number) => {
+    const prevIndex = (index - 1 + prototypeScreens.length) % prototypeScreens.length;
+    const nextIndex = (index + 1) % prototypeScreens.length;
+    preloadImage(prevIndex);
+    preloadImage(nextIndex);
   };
 
   // Preload all images on mobile when component mounts
@@ -197,35 +216,61 @@ export default function AppPrototype() {
       prototypeScreens.forEach((_, index) => {
         preloadImage(index);
       });
+    } else {
+      // On desktop, preload adjacent images initially
+      preloadAdjacentImages(0);
     }
   }, []);
 
+  // Preload adjacent images when current screen changes
+  useEffect(() => {
+    preloadAdjacentImages(currentScreen);
+  }, [currentScreen]);
+
   const nextScreen = () => {
     if (isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentScreen((prev) => (prev + 1) % prototypeScreens.length);
-    setTimeout(() => {
-      setIsTransitioning(false);
-    }, 400);
+    const nextIndex = (currentScreen + 1) % prototypeScreens.length;
+    if (loadedImages.has(nextIndex)) {
+      setIsTransitioning(true);
+      setCurrentScreen(nextIndex);
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 400);
+      preloadAdjacentImages(nextIndex);
+    } else {
+      preloadImage(nextIndex);
+      setPendingScreen(nextIndex);
+    }
   };
 
   const prevScreen = () => {
     if (isTransitioning) return;
-    setIsTransitioning(true);
-    setCurrentScreen(
-      (prev) => (prev - 1 + prototypeScreens.length) % prototypeScreens.length
-    );
-    setTimeout(() => {
-      setIsTransitioning(false);
-    }, 400);
+    const prevIndex = (currentScreen - 1 + prototypeScreens.length) % prototypeScreens.length;
+    if (loadedImages.has(prevIndex)) {
+      setIsTransitioning(true);
+      setCurrentScreen(prevIndex);
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 400);
+      preloadAdjacentImages(prevIndex);
+    } else {
+      preloadImage(prevIndex);
+      setPendingScreen(prevIndex);
+    }
   };
 
   const jumpToScreen = (index: number) => {
-    setDisableTransitions(true);
-    setCurrentScreen(index);
-    setTimeout(() => {
-      setDisableTransitions(false);
-    }, 50);
+    if (loadedImages.has(index)) {
+      setDisableTransitions(true);
+      setCurrentScreen(index);
+      setTimeout(() => {
+        setDisableTransitions(false);
+      }, 50);
+      preloadAdjacentImages(index);
+    } else {
+      preloadImage(index);
+      setPendingScreen(index);
+    }
   };
 
   const getPrevIndex = () =>
@@ -305,6 +350,7 @@ export default function AppPrototype() {
           <div className="flex items-center justify-center gap-4">
             <button
               onClick={prevScreen}
+              onMouseEnter={() => preloadImage(getPrevIndex())}
               className="w-9 h-9 bg-white border border-gray-200 rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform text-gray-700 !cursor-pointer"
             >
               ←
@@ -314,6 +360,7 @@ export default function AppPrototype() {
             </span>
             <button
               onClick={nextScreen}
+              onMouseEnter={() => preloadImage(getNextIndex())}
               className="w-9 h-9 bg-white border border-gray-200 rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform text-gray-700 !cursor-pointer"
             >
               →

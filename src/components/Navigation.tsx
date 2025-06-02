@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Shield, Menu, X, ChevronDown, ExternalLink } from "lucide-react";
+import { Shield, Menu, X, ChevronDown, ExternalLink, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 const Navigation = () => {
@@ -93,7 +94,7 @@ const Navigation = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       className={cn(
-        "fixed top-0 z-50 w-full transition-all duration-300",
+        "fixed top-0 z-50 w-full transition-all duration-300 max-[350px]:hidden max-h-[350px]:hidden",
         scrolled ? "glass-effect shadow-lg/25" : "bg-transparent"
       )}
     >
@@ -105,18 +106,27 @@ const Navigation = () => {
             transition={{ delay: 0.2 }}
             className="flex items-center space-x-3"
           >
-            <div className="relative">
-              <Shield className="h-8 w-8 text-primary p-1" />
-              <div className="absolute inset-0 animate-glow rounded-full opacity-50" />
+            <div className="relative animate-float">
+              <Shield className="h-8 w-8 text-primary p-1 animate-pulse-slow rounded-full" />
             </div>
             <div className="flex items-center gap-2">
               <span className="text-xl font-bold text-gradient">HerSignal</span>
-              <span className="ml-2 px-2 py-1 bg-primary text-primary-foreground text-xs font-medium rounded-full max-[386px]:hidden">
-                Hackathon Winner
-              </span>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="ml-2 px-2 py-1 bg-primary text-primary-foreground text-xs font-medium rounded-full max-[386px]:hidden flex items-center gap-1 ring-2 ring-primary ring-offset-2 ring-offset-background cursor-default">
+                      <Trophy className="h-3 w-3" />
+                      Hackathon Winner
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <span>Won the most inclusive and accessible prize</span>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </motion.div>
-          <div className="justify-between">
+          <div className="flex items-center space-x-6">
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
               {/* Full menu for screens 1024px+ */}
@@ -178,67 +188,67 @@ const Navigation = () => {
                   )}
                 </motion.button>
               </div>
+            </div>
 
-              {/* Need Help for 750px+ */}
-              <div className="relative resources-dropdown hidden md:block">
-                <motion.button
-                  initial={{ opacity: 0, y: -20 }}
+            {/* Need Help for 750px+ */}
+            <div className="relative resources-dropdown hidden md:block">
+              <motion.button
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * navItems.length }}
+                onClick={() =>
+                  setResourcesDropdownOpen(!resourcesDropdownOpen)
+                }
+                onMouseEnter={() => setResourcesDropdownOpen(true)}
+                className="px-3 py-1.5 bg-primary text-primary-foreground text-sm font-medium rounded-full hover:bg-primary/90 transition-colors flex items-center"
+              >
+                Need Help?
+                <ChevronDown
+                  className={cn(
+                    "ml-1 h-3 w-3 transition-transform",
+                    resourcesDropdownOpen && "rotate-180"
+                  )}
+                />
+              </motion.button>
+
+              {resourcesDropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 * navItems.length }}
-                  onClick={() =>
-                    setResourcesDropdownOpen(!resourcesDropdownOpen)
-                  }
+                  exit={{ opacity: 0, y: -10 }}
                   onMouseEnter={() => setResourcesDropdownOpen(true)}
-                  className="px-3 py-1.5 bg-primary text-primary-foreground text-sm font-medium rounded-full hover:bg-primary/90 transition-colors flex items-center"
+                  onMouseLeave={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  className="absolute top-full right-0 mt-2 w-80 glass-effect rounded-lg shadow-lg border p-2 z-50 resources-dropdown"
                 >
-                  Need Help?
-                  <ChevronDown
-                    className={cn(
-                      "ml-1 h-3 w-3 transition-transform",
-                      resourcesDropdownOpen && "rotate-180"
-                    )}
-                  />
-                </motion.button>
-
-                {resourcesDropdownOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    onMouseEnter={() => setResourcesDropdownOpen(true)}
-                    onMouseLeave={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
-                    className="absolute top-full right-0 mt-2 w-80 glass-effect rounded-lg shadow-lg border p-2 z-50 resources-dropdown"
-                  >
-                    {resourceItems.map((resource, index) => (
-                      <motion.a
-                        key={resource.href}
-                        href={resource.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="block p-3 rounded-md hover:bg-accent transition-colors group"
-                      >
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <h4 className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
-                              {resource.label}
-                            </h4>
-                            <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                              {resource.description}
-                            </p>
-                          </div>
-                          <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 ml-2" />
+                  {resourceItems.map((resource, index) => (
+                    <motion.a
+                      key={resource.href}
+                      href={resource.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="block p-3 rounded-md hover:bg-accent transition-colors group"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h4 className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                            {resource.label}
+                          </h4>
+                          <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                            {resource.description}
+                          </p>
                         </div>
-                      </motion.a>
-                    ))}
-                  </motion.div>
-                )}
-              </div>
+                        <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 ml-2" />
+                      </div>
+                    </motion.a>
+                  ))}
+                </motion.div>
+              )}
             </div>
 
             {/* Mobile Menu Button - visible at different breakpoints */}
