@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://her-signal.org'),
   title: "HerSignal - AI-Powered Safety App for Women",
   description: "Stay safe with HerSignal's AI emergency simulation. Instantly generate realistic phone calls to help you escape dangerous situations. Your personal safety companion.",
   keywords: ["women safety", "personal safety app", "AI emergency calls", "safety technology", "violence prevention", "women protection", "emergency simulation", "VAWG", "criminology", "deterrence theory"],
@@ -20,8 +21,6 @@ export const metadata: Metadata = {
   creator: "HerSignal",
   publisher: "HerSignal",
   robots: "index, follow",
-  viewport: "width=device-width, initial-scale=1",
-  themeColor: "#8b5cf6",
   manifest: "/manifest.json",
   icons: {
     icon: "/favicon.ico",
@@ -54,6 +53,12 @@ export const metadata: Metadata = {
     canonical: "https://her-signal.org",
   },
   category: "Safety Technology",
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#8b5cf6',
 };
 
 export default function RootLayout({

@@ -70,6 +70,7 @@ jobs:
           test -f out/sitemap.xml || (echo "Missing sitemap.xml in build output" && exit 1)
           test -f out/robots.txt || (echo "Missing robots.txt in build output" && exit 1)
           test -f out/manifest.json || (echo "Missing manifest.json in build output" && exit 1)
+          test -f out/favicon.ico || (echo "Missing favicon.ico in build output" && exit 1)
           echo "Build output verified ✓"
         
       - name: Add .nojekyll file
