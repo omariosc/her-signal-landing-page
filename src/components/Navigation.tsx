@@ -107,7 +107,7 @@ const Navigation = () => {
             transition={{ delay: 0.2 }}
             className="flex items-center space-x-3"
           >
-            <div className="relative animate-float">
+            <div className="relative animate-float p-2">
               <Shield className="h-8 w-8 text-primary p-1 animate-pulse-slow rounded-full" />
             </div>
             <div className="flex items-center gap-2">
@@ -115,7 +115,7 @@ const Navigation = () => {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <span className="ml-2 px-2 py-1 bg-primary text-primary-foreground text-xs font-medium rounded-full max-[386px]:hidden flex items-center gap-1 ring-2 ring-primary ring-offset-2 ring-offset-background cursor-default">
+                    <span className="ml-2 px-2 py-1 bg-primary text-primary-foreground text-xs font-medium rounded-full max-[405px]:hidden flex items-center gap-1 ring-2 ring-primary ring-offset-2 ring-offset-background cursor-default">
                       <Trophy className="h-3 w-3" />
                       Hackathon Winner
                     </span>

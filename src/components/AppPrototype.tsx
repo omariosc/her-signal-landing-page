@@ -380,36 +380,6 @@ export default function AppPrototype() {
 
         {/* Controls and info */}
         <div className="space-y-[21px] -mt-6">
-          {/* Mobile navigation buttons - shown above screen on small screens */}
-          <div className="block md:hidden mb-6">
-            <div className="flex flex-wrap gap-2 justify-center">
-              {prototypeScreens.map((_, index) => {
-                if (index === 2 || index === 4 || index === 6) {
-                  return null;
-                }
-                return (
-                  <Button
-                    key={index}
-                    variant={currentScreen === index ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => jumpToScreen(index)}
-                    onMouseEnter={() => preloadImage(index)}
-                    className="w-8 h-8 p-0"
-                  >
-                    {index === 3
-                      ? 3
-                      : index === 5
-                      ? 4
-                      : index === 7
-                      ? 5
-                      : index === 8
-                      ? 6
-                      : index + 1}
-                  </Button>
-                );
-              })}
-            </div>
-          </div>
 
           <Card className="p-6">
             <h3 className="text-xl font-semibold mb-2">

@@ -54,7 +54,7 @@ html {
   }
   
   .hover-lift {
-    @apply transition-all duration-200 hover:scale-105 hover:shadow-2xl;
+    @apply transition-all duration-200 min-[786px]:hover:scale-105 min-[786px]:hover:shadow-2xl;
   }
   
   .gradient-mesh {
@@ -130,6 +130,21 @@ html {
   }
   50% { 
     transform: translateY(-3px);
+  }
+}
+
+/* Safari-specific fixes for logo cropping */
+@supports (-webkit-appearance: none) {
+  .animate-float {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+  
+  .animate-pulse-slow {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
   }
 }
 

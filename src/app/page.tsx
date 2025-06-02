@@ -202,10 +202,10 @@ export default function Home() {
                   className="space-y-4"
                 >
                   <TooltipProvider>
-                    <div className="text-xs/6 text-gray-600">
+                    <div className="text-xs/7 text-gray-600">
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <span className="bg-primary text-white px-2 py-1 rounded-full text-xs font-medium ring-2 ring-primary ring-offset-2 ring-offset-background cursor-default">
+                          <span className="bg-primary text-white px-2 py-1 rounded-full text-xs font-medium cursor-default">
                             Won #1
                           </span>
                         </TooltipTrigger>
@@ -272,7 +272,7 @@ export default function Home() {
               transition={{ type: "spring" }}
               className="flex justify-center mb-8"
             >
-              <div className="relative animate-float">
+              <div className="relative animate-float p-4">
                 <Shield className="h-20 w-20 text-primary animate-bounce-subtle p-2 animate-pulse-slow rounded-full" />
               </div>
             </motion.div>
