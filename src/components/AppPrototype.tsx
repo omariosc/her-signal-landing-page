@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import DownloadButtons from "./DownloadButtons";
@@ -165,7 +165,7 @@ export default function AppPrototype() {
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set([0])); // Start with first image loaded
   const [pendingScreen, setPendingScreen] = useState<number | null>(null);
 
-  const getImagePath = (index: number) => {
+  const getImagePath = useCallback((index: number) => {
     return `/${
       index === 0
         ? "0-discrete"
@@ -185,11 +185,11 @@ export default function AppPrototype() {
         ? "4-reminders"
         : "5-feedback"
     }.svg`;
-  };
+  }, []);
 
-  const preloadImage = (index: number) => {
+  const preloadImage = useCallback((index: number) => {
     if (loadedImages.has(index)) return;
-    
+
     const img = new window.Image();
     img.src = getImagePath(index);
     img.onload = () => {
@@ -200,14 +200,14 @@ export default function AppPrototype() {
         setPendingScreen(null);
       }
     };
-  };
+  }, [loadedImages, getImagePath, pendingScreen]);
 
-  const preloadAdjacentImages = (index: number) => {
+  const preloadAdjacentImages = useCallback((index: number) => {
     const prevIndex = (index - 1 + prototypeScreens.length) % prototypeScreens.length;
     const nextIndex = (index + 1) % prototypeScreens.length;
     preloadImage(prevIndex);
     preloadImage(nextIndex);
-  };
+  }, [preloadImage]);
 
   // Preload all images on mobile when component mounts
   useEffect(() => {
@@ -220,12 +220,12 @@ export default function AppPrototype() {
       // On desktop, preload adjacent images initially
       preloadAdjacentImages(0);
     }
-  }, []);
+  }, [preloadAdjacentImages, preloadImage]);
 
   // Preload adjacent images when current screen changes
   useEffect(() => {
     preloadAdjacentImages(currentScreen);
-  }, [currentScreen]);
+  }, [currentScreen, preloadAdjacentImages]);
 
   const nextScreen = () => {
     if (isTransitioning) return;
@@ -484,9 +484,9 @@ export default function AppPrototype() {
             </div>
 
             <div className="border-t border-border pt-6">
-              <h4 className="font-semibold mb-4 text-center">
+              {/* <h4 className="font-semibold mb-4 text-center">
                 Download the App
-              </h4>
+              </h4> */}
               <DownloadButtons comingSoon={true} />
             </div>
           </Card>

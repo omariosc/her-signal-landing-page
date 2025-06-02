@@ -20,6 +20,7 @@ const Navigation = () => {
       const sections = [
         "hero",
         "prototype",
+        "problem",
         "theory",
         "evidence",
         "concept",
@@ -60,11 +61,12 @@ const Navigation = () => {
 
   const navItems = [
     { href: "#prototype", label: "Download" },
+    { href: "#problem", label: "Problem" },
     { href: "#theory", label: "Theory" },
     { href: "#evidence", label: "Evidence" },
     { href: "#concept", label: "Concept" },
     { href: "#context", label: "Context" },
-    { href: "#challenge", label: "Challenge" },
+    // { href: "#challenge", label: "Challenge" },
   ];
 
   const resourceItems = [

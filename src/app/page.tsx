@@ -22,6 +22,9 @@ import {
   Clock,
   MapPin,
   UserCheck,
+  Ban,
+  HeartCrack,
+  TrendingDown,
 } from "lucide-react";
 
 import Navigation from "@/components/Navigation";
@@ -37,9 +40,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   RegionalDataChart,
   GlobalPrevalenceChart,
+  SafetyPrecautionsChart,
 } from "@/components/ChartComponents";
 import AppPrototype from "@/components/AppPrototype";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import Image from "next/image";
 
 const regionalData = {
@@ -90,36 +99,35 @@ const theoryCards = [
     title: "The User's Shield",
     subtitle: "Non-Confrontational Strategy",
     description:
-      "Phone calls create a 'social shield' and sense of remote companionship, reducing vulnerability without direct confrontation.",
+      'For the user, a phone call is a non-confrontational way to signal non-isolation, creating a "social shield" that reduces feelings of vulnerability. \n Women widely adopt phone calls as a safety tactic because it\'s a low-stakes, non-confrontational way to alter a threatening situation. Instead of directly challenging a potential harasser (or even holding keys between knuckles), which risks escalation, a phone call introduces a perceived third party.',
     details: [
-      "Creates perceived social connection",
-      "Discrete and accessible",
-      "Offers non-aggressive deterrent option",
+      'Creates a "Social Shield": The act of being in a conversation makes the user appear occupied and socially connected, deterring unwanted approaches.',
+      'Invited Space: It creates a sense of "invited space" or remote companionship, which can alleviate feelings of isolation and vulnerability.',
+      'Reduces "Safety Work" Burden: An easy-to-use app would formalize this intuitive tactic, reducing the cognitive load of having to feign a convincing conversation under duress.',
     ],
   },
-  // {
-  //   icon: Brain,
-  //   title: "Perpetrator's Calculus",
-  //   subtitle: "Rational Choice Theory",
-  //   description:
-  //     "Increases perceived risk and effort for potential offenders, disrupting their target selection process.",
-  //   details: [,
-  //     "Signals potential surveillance/witnesses",
-  //     "Reduced perception of isolation",
-  //     "Creates uncertainty about consequences",
-  //   ],
-  // },
+  {
+    icon: Brain,
+    title: "Perpetrator's Calculus",
+    subtitle: "Rational Choice Theory",
+    description:
+      "For a potential perpetrator, a person on the phone is no longer an easy, isolated target. The call increases the perceived risk of being identified, reported, or confronted.",
+    details: [
+      'Rational Choice Theory (RCT) & Situational Crime Prevention (SCP): The call increases the perceived "cost" or risk of the crime (e.g. being identified, reported, or interrupted) and effort, making the potential "reward" less attractive. \n From a perpetrator\'s perspective, a woman on a phone call changes their risk-reward analysis, making them a less appealing target. This aligns with several criminological theories.',
+      "Situational Action Theory (SAT): The call alters the immediate setting by introducing a deterrent threat (the remote listener), which can trigger deliberation in the offender and lead them to see crime as a less viable option.",
+      "Disrupts Target Selection: Perpetrators often seek isolated or vulnerable individuals. A phone call signals connection and awareness, disrupting this selection script.",
+    ],
+  },
   {
     icon: Eye,
     title: "Remote Guardian",
     subtitle: "Capable Guardianship",
     description:
-      "Simulates presence of an active bystander who could intervene, document, or alert authorities.",
+      'The call simulates the presence of a "remote bystander" or "capable guardian" who is aware of the situation, disrupting the harasser\'s confidence that their actions are unobserved.',
     details: [
-      "Creates illusion of remote supervision",
-      "Implies potential real-time documentation",
-      "Suggests immediate intervention capacity",
-      "Reduces perpetrator sense of anonymity",
+      "Capable Guardianship (Routine Activities Theory): The person on the other end of the call is perceived as a guardian who could be alerted, call for help, or witness the event, increasing the risk of apprehension.",
+      "Reduces Anonymity: The core fear for many perpetrators is being caught. A phone call suggests their actions are not anonymous and could have immediate consequences.",
+      "Psychological Impact: The simple belief that 'someone is listening' can be enough to make a perpetrator reconsider their actions, breaking the sense of power and control they feel over an isolated victim.",
     ],
   },
 ];
@@ -155,6 +163,7 @@ const techSolutions = [
   },
 ];
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const innovationPrinciples = [
   {
     number: "01",
@@ -202,8 +211,6 @@ const innovationPrinciples = [
 
 export default function Home() {
   const [selectedRegion, setSelectedRegion] = useState("UK");
-  const [expandedCard, setExpandedCard] = useState<number | null>(null);
-  const [expandedTech, setExpandedTech] = useState<number | null>(null);
 
   return (
     <div className="min-h-screen bg-gradient-mesh">
@@ -225,7 +232,7 @@ export default function Home() {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 0.1 }}
+                  transition={{ duration: 0.3 }}
                   className="space-y-4"
                 >
                   <TooltipProvider>
@@ -256,15 +263,19 @@ export default function Home() {
                   </TooltipProvider>
 
                   <div className="flex flex-col gap-2 items-center">
-                    <img
+                    <Image
                       src="/app-store-badge.png"
                       alt="Download on App Store"
                       className="h-8 w-auto"
+                      width={135}
+                      height={40}
                     />
-                    <img
+                    <Image
                       src="/google-play-badge.png"
                       alt="Get it on Google Play"
                       className="h-8 w-auto"
+                      width={135}
+                      height={40}
                     />
                   </div>
 
@@ -292,7 +303,7 @@ export default function Home() {
             <motion.div
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: "spring" }}
+              transition={{ type: "spring" }}
               className="flex justify-center mb-8"
             >
               <div className="relative animate-float">
@@ -303,7 +314,7 @@ export default function Home() {
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
+              transition={{ duration: 0.5 }}
               className="text-5xl md:text-7xl/15 lg:text-8xl font-black leading-tight"
             >
               <span className="text-gradient">HerSignal</span>
@@ -314,7 +325,7 @@ export default function Home() {
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
+              transition={{ duration: 0.5 }}
               className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
             >
               Stay safe with AI-powered emergency calls. Instantly generate
@@ -324,7 +335,7 @@ export default function Home() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
+              transition={{ duration: 0.5 }}
               className="flex flex-col gap-6 justify-center items-center pt-8"
             >
               {/* Award Text */}
@@ -416,6 +427,116 @@ export default function Home() {
         <AppPrototype />
       </section>
 
+      {/* Problem Section */}
+      <section
+        id="problem"
+        className="py-24 md:py-32 max-[350px]:hidden max-h-[350px]:hidden"
+      >
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center max-w-4xl mx-auto mb-16"
+          >
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-gradient pb-2">
+              The Shadow of Fear
+            </h2>
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              Before exploring solutions, it&apos;s crucial to grasp the profound and widespread impact of Violence Against Women and Girls (VAWG) in public spaces. This threat is not abstract; it shapes daily lives, curtails freedom, and inflicts deep, lasting harm.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-16 max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3 }}
+            >
+              <Card className="glass-effect hover-lift h-full text-center">
+                <CardHeader>
+                  <div className="mx-auto mb-4 p-3 rounded-full bg-destructive/10">
+                    <Ban className="h-12 w-12 text-destructive" />
+                  </div>
+                  <CardTitle className="text-xl text-destructive">
+                    Altered Lives & Restricted Freedom
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Nearly <strong className="font-semibold">50% of women in the UK</strong> feel unsafe walking alone after dark. Globally, countless women intentionally change routines, avoid public places, or limit participation in public life due to fear of harassment or assault.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3 }}
+            >
+              <Card className="glass-effect hover-lift h-full text-center">
+                <CardHeader>
+                  <div className="mx-auto mb-4 p-3 rounded-full bg-destructive/10">
+                    <HeartCrack className="h-12 w-12 text-destructive" />
+                  </div>
+                  <CardTitle className="text-xl text-destructive">
+                    The Mental Health Toll
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Experiencing or fearing VAWG leads to significant psychological impacts, including increased <strong className="font-semibold">anxiety, depression, PTSD</strong>, and a persistent state of hypervigilance for millions of women.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3 }}
+            >
+              <Card className="glass-effect hover-lift h-full text-center">
+                <CardHeader>
+                  <div className="mx-auto mb-4 p-3 rounded-full bg-destructive/10">
+                    <TrendingDown className="h-12 w-12 text-destructive" />
+                  </div>
+                  <CardTitle className="text-xl text-destructive">
+                    The Economic Impact
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Gender-Based Violence, including VAWG in public spaces, imposes enormous economic costs, estimated at <strong className="font-semibold">€366 billion annually in the EU alone</strong> through healthcare, justice system responses, and lost productivity.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center max-w-6xl mx-auto"
+          >
+            <h3 className="text-3xl font-bold mb-8">The Daily Burden of &quot;Safety Work&quot;</h3>
+            <p className="text-xl text-muted-foreground leading-relaxed mb-8">
+              The constant threat forces women to adopt numerous precautionary measures, a form of unpaid, stressful &quot;safety work.&quot; This chart illustrates common tactics women employ to navigate public spaces.
+            </p>
+            <Card className="glass-effect">
+              <CardContent className="p-8">
+                <SafetyPrecautionsChart />
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Theory Section */}
       <section
         id="theory"
@@ -432,28 +553,24 @@ export default function Home() {
               The Science Behind Deterrence
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              Phone calls as safety tools aren&apos;t random—they&apos;re
+              Phone calls as safety tools aren&apos;t random. They&apos;re
               grounded in established criminological theories that explain human
               behavior in threatening situations.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {theoryCards.map((card, index) => {
-              const isExpanded = expandedCard === index;
               return (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.2 }}
+                  transition={{ duration: 0.3 }}
                   layout
                 >
-                  <Card
-                    className="cursor-pointer hover-lift glass-effect group overflow-hidden"
-                    onClick={() => setExpandedCard(isExpanded ? null : index)}
-                  >
+                  <Card className="cursor-pointer hover-lift glass-effect group overflow-hidden">
                     <CardHeader className="text-center pb-4">
                       <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
                         <card.icon className="h-8 w-8 text-primary" />
@@ -473,8 +590,8 @@ export default function Home() {
                       <motion.div
                         initial={false}
                         animate={{
-                          height: isExpanded ? "auto" : 0,
-                          opacity: isExpanded ? 1 : 0,
+                          height: "auto",
+                          opacity: 1,
                         }}
                         transition={{
                           duration: 0.3,
@@ -493,11 +610,10 @@ export default function Home() {
                                 className="flex items-start gap-2"
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{
-                                  opacity: isExpanded ? 1 : 0,
-                                  x: isExpanded ? 0 : -10,
+                                  opacity: 1,
+                                  x: 0,
                                 }}
                                 transition={{
-                                  delay: isExpanded ? idx * 0.1 + 0.2 : 0,
                                   duration: 0.2,
                                 }}
                               >
@@ -510,16 +626,6 @@ export default function Home() {
                           </ul>
                         </div>
                       </motion.div>
-
-                      <div className="flex justify-center mt-4">
-                        <motion.div
-                          animate={{ rotate: isExpanded ? 180 : 0 }}
-                          transition={{ duration: 0.2 }}
-                          className="text-primary"
-                        >
-                          <ArrowRight className="h-5 w-5 rotate-90" />
-                        </motion.div>
-                      </div>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -580,8 +686,9 @@ export default function Home() {
                         The Safety Work Burden
                       </h4>
                       <p className="text-sm text-muted-foreground">
-                        Women perform constant cognitive labor—route planning,
-                        attire choices, vigilance—an invisible tax on freedom.
+                        Women perform constant cognitive labor such as route
+                        planning, attire choices, and vigilance - an invisible
+                        tax on freedom.
                       </p>
                     </div>
                     <div className="p-4 bg-accent rounded-lg border">
@@ -712,7 +819,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
+                transition={{ duration: 0.3 }}
               >
                 <Card className="glass-effect hover-lift h-full">
                   <CardHeader className="text-center">
@@ -828,7 +935,7 @@ export default function Home() {
                   {
                     icon: Zap,
                     title: "Instant Activation",
-                    desc: "Discreet, one-tap activation avoiding conspicuous actions that could alert potential aggressors.",
+                    desc: "Discreet activation avoiding conspicuous actions that could alert potential aggressors.",
                   },
                   {
                     icon: AlertTriangle,
@@ -851,7 +958,7 @@ export default function Home() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
+                    transition={{ duration: 0.3 }}
                   >
                     <Card className="glass-effect hover-lift h-full">
                       <CardHeader className="text-center">
@@ -877,7 +984,7 @@ export default function Home() {
                   {
                     icon: Brain,
                     title: "Minimal Cognitive Load",
-                    desc: "Radically simple design. Under stress, complex navigation fails. Core function must be one-tap accessible.",
+                    desc: "Radically simple design. Under stress, complex navigation fails. Core function must be immediately accessible.",
                   },
                   {
                     icon: Users,
@@ -898,7 +1005,7 @@ export default function Home() {
                   {
                     icon: Target,
                     title: "Focused Purpose",
-                    desc: "Resist feature creep. Primary purpose—deterrent calls—remains uncluttered and paramount.",
+                    desc: "This is not about providing as many features as possible. Interface remains uncluttered and paramount, serving detterance as the primary focus.",
                   },
                   {
                     icon: Eye,
@@ -916,7 +1023,7 @@ export default function Home() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
+                    transition={{ duration: 0.3 }}
                   >
                     <Card className="glass-effect hover-lift h-full">
                       <CardHeader className="text-center">
@@ -942,13 +1049,13 @@ export default function Home() {
                   {
                     icon: Shield,
                     title: "Privacy & Security",
-                    desc: "Minimal data collection. All stored data encrypted and protected against breaches or misuse.",
+                    desc: "Minimal data collection. All stored data is encrypted. Opt-in only for temporary location sharing. We never sell or share your data.",
                     color: "destructive",
                   },
                   {
                     icon: AlertTriangle,
                     title: "No False Promises",
-                    desc: "Responsible marketing clarifying it's a deterrent, not a guarantee, avoiding risky behavior encouragement.",
+                    desc: "We hope the theories of detterance will keep you safe - but unfortunately in the world we live in, a guarantee cannot be made.",
                     color: "destructive",
                   },
                   {
@@ -960,7 +1067,7 @@ export default function Home() {
                   {
                     icon: Brain,
                     title: "Escalation Risk",
-                    desc: "Determined perpetrators discovering fake calls might become more aggressive. This risk cannot be eliminated.",
+                    desc: "Determined perpetrators discovering fake calls might become more aggressive. We attempt to mitigate this risk through perfect user interface replicas.",
                     color: "destructive",
                   },
                   {
@@ -981,7 +1088,7 @@ export default function Home() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
+                    transition={{ duration: 0.3 }}
                   >
                     <Card className="glass-effect hover-lift border-destructive/20 h-full">
                       <CardHeader className="text-center">
@@ -1013,38 +1120,34 @@ export default function Home() {
             </h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {techSolutions.map((tech, index) => {
-                const isExpanded = expandedTech === index;
                 return (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
+                    transition={{ duration: 0.3 }}
                     layout
                   >
-                    <Card
-                      className="cursor-pointer hover-lift glass-effect group overflow-hidden"
-                      onClick={() => setExpandedTech(isExpanded ? null : index)}
-                    >
+                    <Card className="hover-lift glass-effect group overflow-hidden">
                       <CardHeader className="text-center">
                         <tech.icon className="h-12 w-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform" />
                         <CardTitle className="text-xl group-hover:text-primary transition-colors">
                           {tech.title}
                         </CardTitle>
-                        <p className="text-sm text-muted-foreground mt-2">
+                        {/* <p className="text-sm text-muted-foreground mt-2">
                           Examples: {tech.examples}
-                        </p>
+                        </p> */}
                       </CardHeader>
 
                       <motion.div
                         initial={false}
                         animate={{
-                          height: isExpanded ? "auto" : 0,
-                          opacity: isExpanded ? 1 : 0,
+                          height: "auto",
+                          opacity: 1,
                         }}
                         transition={{
-                          duration: 0.3,
+                          duration: 0.1,
                           ease: [0.4, 0.0, 0.2, 1],
                         }}
                         className="overflow-hidden"
@@ -1054,11 +1157,10 @@ export default function Home() {
                             <motion.div
                               initial={{ opacity: 0, y: 10 }}
                               animate={{
-                                opacity: isExpanded ? 1 : 0,
-                                y: isExpanded ? 0 : 10,
+                                opacity: 1,
+                                y: 0,
                               }}
                               transition={{
-                                delay: isExpanded ? 0.2 : 0,
                                 duration: 0.2,
                               }}
                             >
@@ -1072,11 +1174,10 @@ export default function Home() {
                             <motion.div
                               initial={{ opacity: 0, y: 10 }}
                               animate={{
-                                opacity: isExpanded ? 1 : 0,
-                                y: isExpanded ? 0 : 10,
+                                opacity: 1,
+                                y: 0,
                               }}
                               transition={{
-                                delay: isExpanded ? 0.3 : 0,
                                 duration: 0.2,
                               }}
                             >
@@ -1091,15 +1192,15 @@ export default function Home() {
                         </CardContent>
                       </motion.div>
 
-                      <div className="flex justify-center pb-4">
+                      {/* <div className="flex justify-center pb-4">
                         <motion.div
-                          animate={{ rotate: isExpanded ? 180 : 0 }}
+                          animate={{ rotate: 0 }}
                           transition={{ duration: 0.2 }}
                           className="text-primary"
                         >
                           <ArrowRight className="h-4 w-4 rotate-90" />
                         </motion.div>
-                      </div>
+                      </div> */}
                     </Card>
                   </motion.div>
                 );
@@ -1157,14 +1258,31 @@ export default function Home() {
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
+                transition={{ duration: 0.3 }}
               >
                 <Card className="glass-effect hover-lift h-full text-center">
                   <CardHeader>
                     <item.icon className="h-16 w-16 text-primary mx-auto mb-4" />
                     <CardTitle className="text-2xl">{item.title}</CardTitle>
                     <CardDescription className="text-primary font-medium">
-                      {item.subtitle}
+                      {item.subtitle === "CPTED Principles" ? (
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span className="border-b border-dotted border-primary cursor-help">
+                                {item.subtitle}
+                              </span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <span>
+                                Crime Prevention Through Environmental Design
+                              </span>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      ) : (
+                        item.subtitle
+                      )}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -1180,7 +1298,7 @@ export default function Home() {
       </section>
 
       {/* Challenge Section */}
-      <section
+      {/* <section
         id="challenge"
         className="py-24 md:py-32 max-[350px]:hidden max-h-[350px]:hidden"
       >
@@ -1207,7 +1325,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ duration: 0.3 }}
               >
                 <Card className="glass-effect hover-lift h-full">
                   <CardHeader>
@@ -1229,7 +1347,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Footer */}
       <footer className="bg-card border-t py-12 max-[350px]:hidden max-h-[350px]:hidden">

@@ -109,6 +109,11 @@ export function RegionalDataChart({ region, data }: RegionalDataChartProps) {
         usePointStyle: true,
         pointStyle: 'rect',
         callbacks: {
+          title: function (context: TooltipItem<'bar'>[]) {
+            // Get the original label without array formatting/commas
+            const originalLabel = data.labels[context[0].dataIndex];
+            return originalLabel;
+          },
           label: function (context: TooltipItem<'bar'>) {
             return `${context.dataset.label}: ${context.raw}%`;
           },
@@ -179,6 +184,117 @@ export function GlobalPrevalenceChart() {
   return (
     <div className="h-80 md:h-96">
       <Doughnut data={data} options={options} />
+    </div>
+  );
+}
+
+export function SafetyPrecautionsChart() {
+  const safetyData = {
+    labels: [
+      'Avoids Certain Places/Times',
+      'Shares Location with Someone', 
+      'Pretends to be on Phone Call',
+      'Changes Route Frequently',
+      'Carries Keys for Defense',
+      'Avoids Going Out Alone'
+    ],
+    data: [75, 62, 58, 55, 45, 40],
+    source: 'Illustrative data based on common findings (e.g., UK Nat. Travel Attitudes Study)'
+  };
+
+  // Format labels for better display
+  const formatLabels = (labels: string[]) => {
+    return labels.map(label => {
+      const words = label.split(' ');
+      let lines = [];
+      let currentLine = '';
+      
+      words.forEach(word => {
+        if ((currentLine + word).length > 16) {
+          lines.push(currentLine.trim());
+          currentLine = '';
+        }
+        currentLine += word + ' ';
+      });
+      lines.push(currentLine.trim());
+      return lines;
+    });
+  };
+
+  const chartData = {
+    labels: formatLabels(safetyData.labels),
+    datasets: [
+      {
+        label: '% of Women Reporting Use',
+        data: safetyData.data,
+        backgroundColor: '#8b5cf6',
+        borderColor: '#7c3aed',
+        borderWidth: 1,
+        borderRadius: 4,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: 'y' as const,
+    scales: {
+      x: {
+        beginAtZero: true,
+        max: 100,
+        ticks: {
+          callback: function(value: any) {
+            return value + '%';
+          },
+        },
+        grid: {
+          color: 'rgba(0,0,0,0.05)',
+        },
+      },
+      y: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          font: {
+            size: 11,
+          },
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
+      },
+      title: {
+        display: true,
+        text: safetyData.source,
+        position: 'bottom' as const,
+        color: '#6b7280',
+        font: {
+          size: 10,
+        },
+      },
+      tooltip: {
+        padding: 12,
+        boxPadding: 6,
+        usePointStyle: true,
+        pointStyle: 'rect',
+        callbacks: {
+          label: function (context: TooltipItem<'bar'>) {
+            return `${context.dataset.label}: ${context.raw}%`;
+          },
+        },
+      },
+    },
+  };
+
+  return (
+    <div className="h-80 md:h-96 overflow-x-auto">
+      <div className="min-w-[600px] h-full">
+        <Bar data={chartData} options={options} />
+      </div>
     </div>
   );
 }
