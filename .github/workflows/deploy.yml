@@ -30,8 +30,47 @@ jobs:
       - name: Install dependencies
         run: npm ci
         
+      - name: Verify public assets exist
+        run: |
+          echo "Checking for required public assets..."
+          test -f public/favicon.ico || (echo "Missing favicon.ico" && exit 1)
+          test -f public/logo-light.png || (echo "Missing logo-light.png" && exit 1)
+          test -f public/logo-dark.png || (echo "Missing logo-dark.png" && exit 1)
+          test -f public/manifest.json || (echo "Missing manifest.json" && exit 1)
+          test -f public/llms.txt || (echo "Missing llms.txt" && exit 1)
+          echo "All required assets found ✓"
+          
+      - name: Verify app prototype assets
+        run: |
+          echo "Checking for app prototype SVG files..."
+          for file in 0-discrete 1a-profile 1b-minimal-data 2a-emergency-setup 2b-emergency-contacts 3a-train 3b-recording 4-reminders 5-feedback; do
+            test -f "public/${file}.svg" || (echo "Missing ${file}.svg" && exit 1)
+          done
+          echo "All prototype assets found ✓"
+          
+      - name: Verify user profile images
+        run: |
+          echo "Checking for user profile images..."
+          for file in ayesha-khan claire-newton ella-macrae; do
+            test -f "public/${file}.png" || (echo "Missing ${file}.png" && exit 1)
+          done
+          echo "All profile images found ✓"
+        
+      - name: Run linting
+        run: npm run lint
+        
       - name: Build with Next.js
         run: npm run build
+        
+      - name: Verify build output
+        run: |
+          echo "Checking build output..."
+          test -d out || (echo "Build output directory missing" && exit 1)
+          test -f out/index.html || (echo "Missing index.html in build output" && exit 1)
+          test -f out/sitemap.xml || (echo "Missing sitemap.xml in build output" && exit 1)
+          test -f out/robots.txt || (echo "Missing robots.txt in build output" && exit 1)
+          test -f out/manifest.json || (echo "Missing manifest.json in build output" && exit 1)
+          echo "Build output verified ✓"
         
       - name: Add .nojekyll file
         run: touch ./out/.nojekyll

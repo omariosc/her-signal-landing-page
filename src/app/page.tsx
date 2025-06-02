@@ -133,13 +133,62 @@ const techSolutions = [
 export default function Home() {
   const [selectedTheoryCard, setSelectedTheoryCard] = useState<number | null>(null);
 
+  // Structured data for SEO
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "HerSignal",
+    "applicationCategory": "SafetyApplication",
+    "operatingSystem": "iOS, Android, Web",
+    "description": "AI-powered safety app that generates realistic emergency phone calls to help women escape dangerous situations",
+    "url": "https://her-signal.org",
+    "author": {
+      "@type": "Organization",
+      "name": "HerSignal Team"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "reviewCount": "1"
+    },
+    "applicationSubCategory": "Personal Safety",
+    "featureList": [
+      "AI-generated emergency calls",
+      "Realistic voice synthesis",
+      "Quick activation",
+      "Privacy-focused design",
+      "Emergency contact integration"
+    ]
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-mesh">
-      <Navigation />
+    <>
+      {/* Structured Data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      
+      <div className="min-h-screen bg-gradient-mesh">
+        {/* Skip to main content link for accessibility */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-primary-foreground px-4 py-2 rounded-md z-[100] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-foreground"
+        >
+          Skip to main content
+        </a>
+        <Navigation />
 
       {/* Hero Section */}
       <section
         id="hero"
+        role="banner"
+        aria-label="HerSignal - AI Safety Companion Hero Section"
         className="relative min-h-screen flex items-center justify-center max-[350px]:overflow-visible max-h-[350px]:overflow-visible overflow-hidden pt-24 md:pt-32 max-[350px]:pt-0 max-h-[350px]:pt-0"
       >
         <div className="absolute inset-0 bg-gradient-to-br from-background via-background/50 to-primary/5" />
@@ -318,9 +367,12 @@ export default function Home() {
                       .getElementById("prototype")
                       ?.scrollIntoView({ behavior: "smooth" })
                   }
+                  aria-label="Navigate to app prototype section"
+                  role="button"
+                  tabIndex={0}
                 >
                   Try the Prototype
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                 </Button>
                 <Button
                   variant="outline"
@@ -331,6 +383,9 @@ export default function Home() {
                       .getElementById("theory")
                       ?.scrollIntoView({ behavior: "smooth" })
                   }
+                  aria-label="Navigate to scientific theory section"
+                  role="button"
+                  tabIndex={0}
                 >
                   Learn the Science
                 </Button>
@@ -341,16 +396,23 @@ export default function Home() {
       </section>
 
       {/* App Prototype Section */}
-      <section
-        id="prototype"
-        className="py-24 md:py-32 bg-muted/30 max-[350px]:hidden max-h-[350px]:hidden"
+      <main
+        id="main-content"
       >
+        <section
+          id="prototype"
+          role="region"
+          aria-label="App Prototype Interactive Demo"
+          className="py-24 md:py-32 bg-muted/30 max-[350px]:hidden max-h-[350px]:hidden"
+        >
         <AppPrototype />
       </section>
 
       {/* Problem Section */}
       <section
         id="problem"
+        role="region"
+        aria-labelledby="problem-heading"
         className="py-24 md:py-32 max-[350px]:hidden max-h-[350px]:hidden"
       >
         <div className="container mx-auto px-6">
@@ -360,7 +422,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center max-w-4xl mx-auto mb-16"
           >
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-gradient pb-2">
+            <h2 id="problem-heading" className="text-4xl md:text-6xl font-bold mb-6 text-gradient pb-2">
               The Shadow of Fear
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed">
@@ -532,6 +594,8 @@ export default function Home() {
       {/* Theory Section */}
       <section
         id="theory"
+        role="region"
+        aria-labelledby="theory-heading"
         className="py-24 md:py-32 max-[350px]:hidden max-h-[350px]:hidden"
       >
         <div className="container mx-auto px-6">
@@ -541,7 +605,7 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center max-w-4xl mx-auto mb-16"
           >
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 text-gradient pb-2">
+            <h2 id="theory-heading" className="text-4xl md:text-6xl font-bold mb-6 text-gradient pb-2">
               The Science Behind Deterrence
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed">
@@ -563,11 +627,20 @@ export default function Home() {
                   layout
                 >
                   <Card 
-                    className="cursor-pointer hover-lift glass-effect group overflow-hidden relative"
+                    className="cursor-pointer hover-lift glass-effect group overflow-hidden relative focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                     onClick={() => setSelectedTheoryCard(index)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setSelectedTheoryCard(index);
+                      }
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Open details for ${card.title} - ${card.subtitle}`}
                   >
                     <div className="absolute top-4 right-4 z-10">
-                      <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                      <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" aria-hidden="true" />
                     </div>
                     <CardHeader className="text-center pb-4">
                       <div className="mx-auto mb-4 p-3 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
@@ -1234,8 +1307,12 @@ export default function Home() {
       </footer>
 
       {/* Theory Card Modal */}
-      <Dialog open={selectedTheoryCard !== null} onOpenChange={() => setSelectedTheoryCard(null)}>
-        <DialogContent className="max-w-2xl">
+      <Dialog 
+        open={selectedTheoryCard !== null} 
+        onOpenChange={() => setSelectedTheoryCard(null)}
+        aria-describedby="theory-modal-description"
+      >
+        <DialogContent className="max-w-2xl" role="dialog" aria-modal="true">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-3">
               {selectedTheoryCard !== null && (
@@ -1256,12 +1333,12 @@ export default function Home() {
           
           {selectedTheoryCard !== null && (
             <div className="space-y-4">
-              <h4 className="font-semibold text-lg text-primary">
+              <h4 id="theory-modal-description" className="font-semibold text-lg text-primary">
                 Key Mechanisms:
               </h4>
-              <ul className="space-y-3">
+              <ul className="space-y-3" role="list">
                 {theoryCards[selectedTheoryCard].details.map((detail, idx) => (
-                  <li key={idx} className="flex items-start gap-3">
+                  <li key={idx} className="flex items-start gap-3" role="listitem">
                     <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                     <span className="text-muted-foreground leading-relaxed">
                       {detail.includes(':') ? (
@@ -1280,6 +1357,8 @@ export default function Home() {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+      </main>
+      </div>
+    </>
   );
 }

@@ -278,9 +278,9 @@ export default function AppPrototype() {
   const getNextIndex = () => (currentScreen + 1) % prototypeScreens.length;
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto p-6" role="region" aria-labelledby="prototype-heading">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold mb-4">App Prototype Preview</h2>
+        <h2 id="prototype-heading" className="text-3xl font-bold mb-4">App Prototype Preview</h2>
         <p className="text-gray-600">
           Experience the HerSignal user journey - from discreet activation to
           safe exit
@@ -333,6 +333,15 @@ export default function AppPrototype() {
                     !isCurrentScreen ? "hidden md:block" : ""
                   } ${!isCurrentScreen ? "cursor-pointer" : ""}`}
                   onClick={() => !isCurrentScreen && jumpToScreen(index)}
+                  onKeyDown={(e) => {
+                    if (!isCurrentScreen && (e.key === 'Enter' || e.key === ' ')) {
+                      e.preventDefault();
+                      jumpToScreen(index);
+                    }
+                  }}
+                  role={!isCurrentScreen ? 'button' : undefined}
+                  tabIndex={!isCurrentScreen ? 0 : -1}
+                  aria-label={!isCurrentScreen ? `Go to ${screen.title}` : undefined}
                 >
                   <Image
                     src={getImagePath(index)}
@@ -465,14 +474,14 @@ export default function AppPrototype() {
                     key={stepIndex}
                     className={`flex items-center space-x-2 ${
                       isCurrentOrRelated
-                        ? "text-blue-600"
+                        ? "text-primary"
                         : "text-gray-600"
                     }`}
                   >
                     <span
                       className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
                         isCurrentOrRelated
-                          ? "bg-blue-600 text-white"
+                          ? "bg-primary text-white"
                           : "bg-gray-200"
                       }`}
                     >

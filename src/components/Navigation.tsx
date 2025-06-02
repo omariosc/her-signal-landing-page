@@ -97,8 +97,9 @@ const Navigation = () => {
         "fixed top-0 z-50 w-full transition-all duration-300 max-[350px]:hidden max-h-[350px]:hidden",
         scrolled ? "glass-effect shadow-lg/25" : "bg-transparent"
       )}
+      role="banner"
     >
-      <nav className="container mx-auto px-6 py-4">
+      <nav className="container mx-auto px-6 py-4" role="navigation" aria-label="Main navigation">
         <div className="flex items-center justify-between">
           <motion.div
             initial={{ opacity: 0 }}
@@ -139,11 +140,13 @@ const Navigation = () => {
                     transition={{ delay: 0.1 * index }}
                     onClick={() => handleNavClick(item.href)}
                     className={cn(
-                      "relative text-sm font-medium transition-colors hover:text-primary",
+                      "relative text-sm font-medium transition-colors hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm",
                       activeSection === item.href.slice(1)
                         ? "text-primary"
                         : "text-muted-foreground"
                     )}
+                    aria-current={activeSection === item.href.slice(1) ? 'page' : undefined}
+                    aria-label={`Navigate to ${item.label} section`}
                   >
                     {item.label}
                     {activeSection === item.href.slice(1) && (
@@ -255,8 +258,11 @@ const Navigation = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="xl:hidden"
+              className="xl:hidden focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-menu"
             >
               {mobileMenuOpen ? (
                 <X className="h-5 w-5" />
@@ -270,10 +276,13 @@ const Navigation = () => {
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
           <motion.div
+            id="mobile-menu"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             className="lg:hidden mt-4 space-y-2 glass-effect rounded-lg p-4"
+            role="menu"
+            aria-label="Mobile navigation menu"
           >
             {navItems.map((item) => (
               <button
