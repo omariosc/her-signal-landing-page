@@ -39,6 +39,8 @@ import {
   GlobalPrevalenceChart,
 } from "@/components/ChartComponents";
 import AppPrototype from "@/components/AppPrototype";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import Image from "next/image";
 
 const regionalData = {
   UK: {
@@ -211,7 +213,7 @@ export default function Home() {
       {/* Hero Section */}
       <section
         id="hero"
-        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+        className="relative min-h-screen flex items-center justify-center overflow-hidden mt-[40px]"
       >
         <div className="absolute inset-0 bg-gradient-to-br from-background via-background/50 to-primary/5" />
         <div className="container relative z-10 mx-auto px-6 text-center">
@@ -237,7 +239,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-5xl md:text-7xl lg:text-8xl font-black leading-tight"
+              className="text-5xl md:text-7xl/15 lg:text-8xl font-black leading-tight"
             >
               <span className="text-gradient animate-text">HerSignal</span>
               <br />
@@ -250,7 +252,8 @@ export default function Home() {
               transition={{ delay: 0.6 }}
               className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
             >
-              Stay safe with AI-powered emergency calls. Instantly generate realistic conversations to help you escape dangerous situations.
+              Stay safe with AI-powered emergency calls. Instantly generate
+              realistic conversations to help you escape dangerous situations.
             </motion.p>
 
             <motion.div
@@ -259,7 +262,48 @@ export default function Home() {
               transition={{ delay: 0.8 }}
               className="flex flex-col gap-6 justify-center items-center pt-8"
             >
-              
+              {/* Award Text */}
+              <TooltipProvider>
+                <div className="text-center mb-4">
+                  <div className="text-md/6 text-gray-600">
+                    <span className="bg-primary text-white px-2 py-1 rounded-full text-md font-medium mr-1">
+                      Won #1
+                    </span>{" "}
+                    at the{" "}
+                    <a
+                      href="https://www.eventbrite.co.uk/e/tackling-violence-against-women-and-girls-in-public-spaces-hackathon-tickets-1224875137509"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline hover:text-primary transition-colors"
+                    >
+                      &quot;Tackling Violence against Women and Girls in Public
+                      Spaces Hackathon&quot;
+                    </a>{" "}
+                    <span className="hidden min-[786px]:inline">
+                      at{" "}
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <a
+                            href="https://www.ucl.ac.uk/ioe/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="underline hover:text-primary transition-colors cursor-pointer"
+                          >
+                            UCL&apos;s Institute of Education
+                          </a>
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-xs max-xs:w-[80dvw]">
+                          <span className="text-wrap">
+                            #1 QS World University Rankings in Education for 12
+                            consecutive years
+                          </span>
+                        </TooltipContent>
+                      </Tooltip>
+                    </span>
+                  </div>
+                </div>
+              </TooltipProvider>
+
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Button
                   variant="gradient"
@@ -425,7 +469,7 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 mb-16 mx-auto">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 mb-16 mx-auto overflow-auto">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -538,7 +582,8 @@ export default function Home() {
               Who Benefits
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              Real stories from women who need innovative safety solutions in their daily lives.
+              Real stories from women who need innovative safety solutions in
+              their daily lives.
             </p>
           </motion.div>
 
@@ -548,8 +593,10 @@ export default function Home() {
                 name: "Ayesha Khan",
                 age: 24,
                 image: "/ayesha-khan.png",
-                useCase: "Frequently walks home from university or late shifts; has experienced catcalling and following.",
-                needs: "Discreet app access via smartwatch; AI call provides visible deterrent and records interactions.",
+                useCase:
+                  "Frequently walks home from university or late shifts; has experienced catcalling and following.",
+                needs:
+                  "Discreet app access via smartwatch; AI call provides visible deterrent and records interactions.",
                 useCaseIcon: Clock,
                 needsIcon: Watch,
               },
@@ -557,8 +604,10 @@ export default function Home() {
                 name: "Claire Newton",
                 age: 41,
                 image: "/claire-newton.png",
-                useCase: "Works night shifts, commutes via public transport; worries about being targeted due to uniform and timing.",
-                needs: "Easy-to-activate SOS voice command; AI bot reassures and collects evidence if needed.",
+                useCase:
+                  "Works night shifts, commutes via public transport; worries about being targeted due to uniform and timing.",
+                needs:
+                  "Easy-to-activate SOS voice command; AI bot reassures and collects evidence if needed.",
                 useCaseIcon: MapPin,
                 needsIcon: Smartphone,
               },
@@ -566,8 +615,10 @@ export default function Home() {
                 name: "Ella Macrae",
                 age: 17,
                 image: "/ella-macrae.png",
-                useCase: "Goes out with friends to city centre, but feels unsafe waiting for buses at night.",
-                needs: "Parent-connected alerts; teen-friendly design that doesn't draw attention; quick tap to activate AI call.",
+                useCase:
+                  "Goes out with friends to city centre, but feels unsafe waiting for buses at night.",
+                needs:
+                  "Parent-connected alerts; teen-friendly design that doesn't draw attention; quick tap to activate AI call.",
                 useCaseIcon: Users,
                 needsIcon: UserCheck,
               },
@@ -582,15 +633,20 @@ export default function Home() {
                 <Card className="glass-effect hover-lift h-full">
                   <CardHeader className="text-center">
                     <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden border-4 border-primary/20">
-                      <img
+                      <Image
                         src={profile.image}
                         alt={profile.name}
                         className="w-full h-full object-cover"
+                        width={96}
+                        height={96}
                       />
                     </div>
                     <CardTitle className="text-2xl">
                       <span className="font-bold">{profile.name}</span>
-                      <span className="text-muted-foreground font-normal"> ({profile.age})</span>
+                      <span className="text-muted-foreground font-normal">
+                        {" "}
+                        ({profile.age})
+                      </span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -598,7 +654,9 @@ export default function Home() {
                       <div className="flex items-start gap-3">
                         <profile.useCaseIcon className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                         <div>
-                          <h4 className="font-semibold text-sm text-primary mb-1">Use Case</h4>
+                          <h4 className="font-semibold text-sm text-primary mb-1">
+                            Use Case
+                          </h4>
                           <p className="text-sm text-muted-foreground leading-relaxed">
                             {profile.useCase}
                           </p>
@@ -607,7 +665,9 @@ export default function Home() {
                       <div className="flex items-start gap-3">
                         <profile.needsIcon className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                         <div>
-                          <h4 className="font-semibold text-sm text-primary mb-1">Needs</h4>
+                          <h4 className="font-semibold text-sm text-primary mb-1">
+                            Needs
+                          </h4>
                           <p className="text-sm text-muted-foreground leading-relaxed">
                             {profile.needs}
                           </p>
@@ -738,8 +798,8 @@ export default function Home() {
                     desc: (
                       <>
                         Developed <strong>with</strong> diverse women, not{" "}
-                        <strong>for</strong> them. Lived experiences inform every design
-                        decision.
+                        <strong>for</strong> them. Lived experiences inform
+                        every design decision.
                       </>
                     ),
                   },
@@ -975,7 +1035,9 @@ export default function Home() {
               Beyond Technology
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              Though technology is useful in tackling violence against women and girls, there are various other factors that need to be considered in order to create a holistic approach to safety.
+              Though technology is useful in tackling violence against women and
+              girls, there are various other factors that need to be considered
+              in order to create a holistic approach to safety.
             </p>
           </motion.div>
 
@@ -1101,7 +1163,13 @@ export default function Home() {
               research • Built for innovators and changemakers
             </p>
             <p className="text-xs text-muted-foreground mt-2">
-              Contact: support@hersignal.org
+              Contact:{" "}
+              <a
+                href="mailto:support@hersignal.org"
+                className="bg-primary text-white px-2 py-1 rounded-full hover:underline transition-all duration-200"
+              >
+                support@hersignal.org
+              </a>
             </p>
           </motion.div>
         </div>

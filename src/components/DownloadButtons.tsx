@@ -1,13 +1,16 @@
 "use client"
 
+import Image from "next/image"
+
 export function AppStoreButton({ comingSoon = true }: { comingSoon?: boolean }) {
   return (
     <div className="relative inline-block">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img 
+      <Image 
         src="/app-store-badge.png" 
         alt={comingSoon ? "Coming Soon on the App Store" : "Download on the App Store"}
         className="h-[40px] w-auto transition-opacity hover:opacity-80"
+        width={135}
+        height={40}
       />
       {comingSoon && (
         <div className="absolute inset-0 bg-gray-800/70 rounded-md flex items-center justify-center">
@@ -21,11 +24,12 @@ export function AppStoreButton({ comingSoon = true }: { comingSoon?: boolean }) 
 export function GooglePlayButton({ comingSoon = true }: { comingSoon?: boolean }) {
   return (
     <div className="relative inline-block">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img 
+      <Image 
         src="/google-play-badge.png" 
         alt={comingSoon ? "Coming Soon to Google Play" : "Get it on Google Play"}
         className="h-[40px] w-auto transition-opacity hover:opacity-80"
+        width={135}
+        height={40}
       />
       {comingSoon && (
         <div className="absolute inset-0 bg-gray-800/70 rounded-md flex items-center justify-center">
