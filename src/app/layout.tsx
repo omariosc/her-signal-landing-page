@@ -26,6 +26,17 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
     apple: "/favicon.ico",
   },
+  formatDetection: {
+    telephone: false,
+    date: false,
+    email: false,
+    address: false
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'HerSignal'
+  },
   openGraph: {
     title: "HerSignal - AI-Powered Safety App for Women",
     description: "Stay safe with HerSignal's AI emergency simulation. Instantly generate realistic phone calls to help you escape dangerous situations.",
@@ -58,7 +69,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
   themeColor: '#8b5cf6',
+  colorScheme: 'light',
 };
 
 export default function RootLayout({

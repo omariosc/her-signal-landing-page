@@ -19,12 +19,22 @@
 
 /* Improve loading performance */
 img {
-  content-visibility: auto;
+  /* Modern browsers will use loading="lazy" HTML attribute instead */
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
 
 /* Smooth scroll behavior */
 html {
   scroll-behavior: smooth;
+}
+
+/* Fallback for browsers without smooth scroll support */
+@supports not (scroll-behavior: smooth) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 /* Focus visible for accessibility */
@@ -50,11 +60,31 @@ html {
   }
   
   .glass-effect {
-    @apply bg-card/80 backdrop-blur-sm border border-border/50 shadow-xl rounded-lg;
+    /* Fallback for browsers without backdrop-filter support */
+    @apply bg-card/90 border border-border/50 shadow-xl rounded-lg;
+  }
+  
+  /* Modern browsers with backdrop-filter support */
+  @supports (backdrop-filter: blur(8px)) or (-webkit-backdrop-filter: blur(8px)) {
+    .glass-effect {
+      @apply bg-card/80 backdrop-blur-sm;
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+    }
   }
   
   .hover-lift {
-    @apply transition-all duration-200 min-[786px]:hover:scale-105 min-[786px]:hover:shadow-2xl;
+    -webkit-transition: all 200ms ease;
+    transition: all 200ms ease;
+    @apply duration-200;
+  }
+  
+  @media (min-width: 786px) {
+    .hover-lift:hover {
+      -webkit-transform: scale(1.05);
+      transform: scale(1.05);
+      @apply shadow-2xl;
+    }
   }
   
   .gradient-mesh {
@@ -64,34 +94,61 @@ html {
 
 @layer utilities {
   .animate-bounce-subtle {
+    -webkit-animation: bounce-subtle 2s ease-in-out infinite;
     animation: bounce-subtle 2s ease-in-out infinite;
   }
   
   .animate-glow {
+    -webkit-animation: glow 2s ease-in-out infinite alternate;
     animation: glow 2s ease-in-out infinite alternate;
   }
   
   .animate-pulse-slow {
+    -webkit-animation: pulse-slow 3s ease-in-out infinite;
     animation: pulse-slow 3s ease-in-out infinite;
   }
   
   .animate-float {
+    -webkit-animation: float 4s ease-in-out infinite;
     animation: float 4s ease-in-out infinite;
   }
   
   .animate-text {
     background-size: 400% 400%;
+    -webkit-animation: gradient 3s ease-in-out infinite;
     animation: gradient 3s ease-in-out infinite;
   }
   
 }
 
-@keyframes bounce-subtle {
+@-webkit-keyframes bounce-subtle {
   0%, 100% { 
+    -webkit-transform: translateY(0px);
     transform: translateY(0px); 
   }
   50% { 
+    -webkit-transform: translateY(-5px);
     transform: translateY(-5px); 
+  }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% { 
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px); 
+  }
+  50% { 
+    -webkit-transform: translateY(-5px);
+    transform: translateY(-5px); 
+  }
+}
+
+@-webkit-keyframes glow {
+  0% { 
+    box-shadow: 0 0 5px #8b5cf6, 0 0 10px #8b5cf6, 0 0 15px #8b5cf6; 
+  }
+  100% { 
+    box-shadow: 0 0 10px #8b5cf6, 0 0 20px #8b5cf6, 0 0 30px #8b5cf6; 
   }
 }
 
@@ -104,12 +161,32 @@ html {
   }
 }
 
+@-webkit-keyframes gradient {
+  0%, 100% { 
+    background-position: 0% 50%; 
+  }
+  50% { 
+    background-position: 100% 50%; 
+  }
+}
+
 @keyframes gradient {
   0%, 100% { 
     background-position: 0% 50%; 
   }
   50% { 
     background-position: 100% 50%; 
+  }
+}
+
+@-webkit-keyframes pulse-slow {
+  0%, 100% { 
+    box-shadow: 0 0 10px #8b5cf6, 0 0 15px #8b5cf6, 0 0 20px #8b5cf6;
+    opacity: 0.5;
+  }
+  50% { 
+    box-shadow: 0 0 20px #8b5cf6, 0 0 30px #8b5cf6, 0 0 40px #8b5cf6;
+    opacity: 0.8;
   }
 }
 
@@ -124,11 +201,24 @@ html {
   }
 }
 
-@keyframes float {
+@-webkit-keyframes float {
   0%, 100% { 
+    -webkit-transform: translateY(0px);
     transform: translateY(0px);
   }
   50% { 
+    -webkit-transform: translateY(-3px);
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes float {
+  0%, 100% { 
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+  50% { 
+    -webkit-transform: translateY(-3px);
     transform: translateY(-3px);
   }
 }
