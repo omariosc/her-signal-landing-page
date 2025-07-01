@@ -1341,10 +1341,10 @@ export default function Home() {
                 <p className="text-xs text-muted-foreground mt-2">
                   Contact:{" "}
                   <a
-                    href="mailto:support@hersignal.org"
+                    href="mailto:O.Choudhry@leeds.ac.uk"
                     className="bg-primary text-white px-2 py-1 rounded-full hover:underline transition-all duration-200"
                   >
-                    support@hersignal.org
+                    O.Choudhry@leeds.ac.uk
                   </a>
                 </p>
               </motion.div>
